@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, RotateCcw, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { TextShimmer } from '@/components/ui/text-shimmer';
 
 interface FlashCard {
   question: string;
@@ -74,11 +75,11 @@ export default function FlashCards() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center glass-card p-4">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="p-8 glass-card">
-          <div className="text-2xl animate-pulse flex items-center gap-2">
-            <Zap className="h-6 w-6" />
-            Generating study materials...
+          <div className="flex items-center gap-2">
+            <Zap className="h-6 w-6 text-primary" />
+            <TextShimmer duration={1} className="text-2xl">Generating study materials...</TextShimmer>
           </div>
         </Card>
       </div>
@@ -140,31 +141,22 @@ export default function FlashCards() {
             Card {currentIndex + 1} of {studyMaterial.flashcards.length}
           </div>
 
-          <div className="perspective-1000">
-            <div
-              key={currentIndex}
-              className="cursor-pointer transition-transform duration-500"
-              style={{
-                transformStyle: 'preserve-3d',
-                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0)',
-              }}
-              onClick={() => setIsFlipped(!isFlipped)}
-            >
-              <Card className="glass-card min-h-[250px] p-8 border border-white/10 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-sm text-primary mb-2 font-semibold uppercase">
-                    {isFlipped ? 'ANSWER' : 'QUESTION'}
-                  </div>
-                  <p className="text-xl md:text-2xl font-bold mb-4">
-                    {isFlipped ? currentCard.answer : currentCard.question}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {isFlipped ? 'Click to see question' : 'Click to reveal answer'}
-                  </p>
-                </div>
-              </Card>
+          <Card
+            className="glass-card min-h-[250px] p-8 border border-white/10 flex items-center justify-center cursor-pointer"
+            onClick={() => setIsFlipped(!isFlipped)}
+          >
+            <div className="text-center">
+              <div className="text-sm text-primary mb-2 font-semibold uppercase">
+                {isFlipped ? 'ANSWER' : 'QUESTION'}
+              </div>
+              <p className="text-xl md:text-2xl font-bold mb-4 whitespace-pre-wrap">
+                {isFlipped ? currentCard.answer : currentCard.question}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {isFlipped ? 'Click to see question' : 'Click to reveal answer'}
+              </p>
             </div>
-          </div>
+          </Card>
 
           <div className="flex justify-between items-center pt-4">
             <Button

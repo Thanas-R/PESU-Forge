@@ -18,11 +18,37 @@ export default function Home() {
 
     setIsUploading(true);
     try {
-      const text = await file.text();
-      setContent(text);
+      const name = file.name.toLowerCase();
+      const ext = name.split('.').pop() || '';
+
+      if (ext === 'txt') {
+        const text = await file.text();
+        setContent(text);
+      } else if (ext === 'docx') {
+        const ab = await file.arrayBuffer();
+        // Dynamic import to keep bundle light
+        const mammoth = await import('mammoth/mammoth.browser');
+        const result = await mammoth.extractRawText({ arrayBuffer: ab });
+        setContent((result.value || '').trim());
+      } else if (ext === 'doc') {
+        toast({
+          title: 'Legacy .doc not supported',
+          description: 'Please convert to .docx or .txt and try again.',
+          variant: 'destructive',
+        });
+        return;
+      } else {
+        toast({
+          title: 'Unsupported file type',
+          description: 'Use a .txt or .docx file.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       toast({
         title: 'File uploaded successfully!',
-        description: 'Your content is ready for processing.',
+        description: 'Extracted text has been placed into the input below.',
       });
     } catch (error) {
       toast({
@@ -104,12 +130,12 @@ export default function Home() {
           <div className="max-w-2xl mx-auto glass-card p-6 md:p-10 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/10">
             <div className="space-y-6">
               <label className="cursor-pointer">
-                <input
-                  type="file"
-                  accept=".txt,.doc,.docx,.pdf,.ppt,.pptx"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
+                  <input
+                    type="file"
+                    accept=".txt,.docx"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
                 <Button
                   disabled={isUploading}
                   className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg transition-all hover:scale-105"
@@ -211,15 +237,15 @@ export default function Home() {
                 <div className="space-y-4 text-sm md:text-lg">
                   <p className="flex flex-col sm:flex-row sm:items-center gap-2">
                     <span className="font-bold text-secondary text-lg md:text-xl">Thanas.R</span>
-                    <span className="text-muted-foreground">AIML Branch • First Year</span>
+                    <span className="text-muted-foreground italic">AIML Branch • First Year</span>
                   </p>
                   <p className="flex flex-col sm:flex-row sm:items-center gap-2">
                     <span className="font-bold text-secondary text-lg md:text-xl">Tanay.S</span>
-                    <span className="text-muted-foreground">CSE Branch • First Year</span>
+                    <span className="text-muted-foreground italic">CSE Branch • First Year</span>
                   </p>
                   <p className="flex flex-col sm:flex-row sm:items-center gap-2">
                     <span className="font-bold text-secondary text-lg md:text-xl">TN Pranav</span>
-                    <span className="text-muted-foreground">CSE Branch • First Year</span>
+                    <span className="text-muted-foreground italic">CSE Branch • First Year</span>
                   </p>
                 </div>
                 <p className="mt-8 text-muted-foreground leading-relaxed text-sm md:text-base">

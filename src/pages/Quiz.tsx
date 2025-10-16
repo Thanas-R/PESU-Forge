@@ -5,6 +5,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
+import { supabase } from '@/integrations/supabase/client';
+import { TextShimmer } from '@/components/ui/text-shimmer';
 
 interface QuizQuestion {
   question: string;
@@ -24,38 +26,37 @@ export default function Quiz() {
 
   useEffect(() => {
     const content = localStorage.getItem('learning-content');
-    if (!content) {
+    if (!content || content.trim().length < 50) {
       toast({
         title: 'No content found',
-        description: 'Please upload content from the home page first.',
+        description: 'Please upload content from the home page first (min 50 chars).',
         variant: 'destructive',
       });
       setIsLoading(false);
       return;
     }
 
-    // Mock quiz generation
-    setTimeout(() => {
-      const mockQuestions: QuizQuestion[] = [
-        {
-          question: 'What does React use to efficiently update the DOM?',
-          options: ['Real DOM', 'Virtual DOM', 'Shadow DOM', 'Direct DOM'],
-          correct: 1,
-        },
-        {
-          question: 'Which hook is used for side effects in React?',
-          options: ['useState', 'useEffect', 'useContext', 'useReducer'],
-          correct: 1,
-        },
-        {
-          question: 'What is JSX?',
-          options: ['A styling language', 'A syntax extension', 'A database', 'A framework'],
-          correct: 1,
-        },
-      ];
-      setQuestions(mockQuestions);
-      setIsLoading(false);
-    }, 1500);
+    (async () => {
+      try {
+        setIsLoading(true);
+        const { data, error } = await supabase.functions.invoke('generate-learning', {
+          body: { content, type: 'quiz', count: 5 },
+        });
+        if (error) throw error;
+        const fromAI = (data?.questions || []).map((q: any) => ({
+          question: q.question,
+          options: q.options,
+          correct: q.correctIndex,
+          explanation: q.explanation,
+        }));
+        setQuestions(fromAI);
+      } catch (e) {
+        console.error(e);
+        toast({ title: 'Failed to generate quiz', variant: 'destructive' });
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, [difficulty, toast]);
 
   const handleAnswer = () => {
@@ -103,7 +104,7 @@ export default function Quiz() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
         <Card className="p-8 pixel-border">
-          <div className="pixel-font text-2xl animate-pulse">Generating quiz...</div>
+          <TextShimmer className='font-mono text-2xl' duration={1}>Generating quiz...</TextShimmer>
         </Card>
       </div>
     );
@@ -145,7 +146,8 @@ export default function Quiz() {
     );
   }
 
-  const currentQ = questions[currentQuestion];
+   const currentQ = questions[currentQuestion];
+   const currentExplanation = (currentQ as any)?.explanation as string | undefined;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20 p-4">
@@ -188,6 +190,12 @@ export default function Quiz() {
         <Button onClick={handleAnswer} className="pixel-button w-full" size="lg">
           Submit Answer
         </Button>
+
+        {selectedAnswer && (
+          <div className="text-center text-sm text-muted-foreground">
+            {currentExplanation && <p className="mt-3">Why: {currentExplanation}</p>}
+          </div>
+        )}
 
         <div className="text-center text-sm text-muted-foreground">
           Score: {score} / {currentQuestion}
