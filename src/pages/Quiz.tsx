@@ -109,6 +109,22 @@ export default function Quiz() {
     );
   }
 
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20 p-4">
+        <Card className="p-8 pixel-border text-center">
+          <h2 className="pixel-font text-2xl mb-4">No Content Available</h2>
+          <p className="text-muted-foreground mb-4">
+            Please upload learning content from the home page to generate a quiz.
+          </p>
+          <Button onClick={() => window.location.href = '/'} className="pixel-button">
+            Go to Home
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
   if (showResult) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20 p-4">
