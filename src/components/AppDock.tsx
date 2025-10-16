@@ -6,23 +6,14 @@ import {
   Network,
   MessageSquare,
   Settings,
-  SunMoon,
 } from 'lucide-react';
 import { Dock, DockIcon, DockItem, DockLabel } from '@/components/Dock';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTheme } from '@/components/providers/ThemeProvider';
 import { AccessibilitySettings } from '@/components/AccessibilitySettings';
 
 export function AppDock() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme, setTheme } = useTheme();
-
-  const toggleTheme = () => {
-    if (theme === 'light') setTheme('dark');
-    else if (theme === 'dark') setTheme('system');
-    else setTheme('light');
-  };
 
   const navItems = [
     {
@@ -81,19 +72,6 @@ export function AppDock() {
         ))}
         
         <div className="w-px h-8 bg-border/40 mx-1" />
-        
-        <div onClick={toggleTheme}>
-          <DockItem className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-all cursor-pointer'>
-            <DockLabel>
-              Theme: {theme === 'system' ? 'System' : theme === 'dark' ? 'Dark' : 'Light'}
-            </DockLabel>
-            <DockIcon>
-              <div className="flex items-center justify-center w-5 h-5">
-                <SunMoon className='h-full w-full text-foreground' />
-              </div>
-            </DockIcon>
-          </DockItem>
-        </div>
 
         <DockItem className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-all'>
           <DockLabel>Settings</DockLabel>
