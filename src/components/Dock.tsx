@@ -78,7 +78,7 @@ function Dock({
         onMouseMove={({ pageX }) => setMouseX(pageX)}
         onMouseLeave={() => setMouseX(Infinity)}
         className={cn(
-          'mx-auto flex w-fit gap-4 rounded-2xl bg-card/80 backdrop-blur-md px-4 border border-border transition-all',
+          'mx-auto flex w-fit gap-3 rounded-3xl glass-card px-6 py-3 transition-all shadow-2xl',
           className
         )}
         style={{ height: panelHeight }}
@@ -140,7 +140,7 @@ function DockLabel({ children, className, ...rest }: DockLabelProps) {
       {isHovered && (
         <div
           className={cn(
-            'absolute -top-6 left-1/2 -translate-x-1/2 w-fit whitespace-pre rounded-md border bg-popover px-2 py-0.5 text-xs text-popover-foreground pixel-font animate-in fade-in slide-in-from-bottom-2 duration-200',
+            'absolute -top-10 left-1/2 -translate-x-1/2 w-fit whitespace-pre rounded-lg glass-card px-3 py-1.5 text-xs text-foreground pixel-font animate-in fade-in slide-in-from-bottom-2 duration-200 shadow-lg',
             className
           )}
           role='tooltip'

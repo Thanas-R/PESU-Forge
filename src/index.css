@@ -36,23 +36,18 @@ All colors MUST be HSL.
     --input: 220 20% 88%;
     --ring: 210 100% 56%;
 
+    --glass-bg: 255 255 255 / 0.1;
+    --glass-border: 255 255 255 / 0.2;
     --pixel-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
-    --radius: 0.25rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -84,6 +79,10 @@ All colors MUST be HSL.
     --border: 220 20% 28%;
     --input: 220 20% 28%;
     --ring: 210 100% 60%;
+    
+    --glass-bg: 0 0 0 / 0.3;
+    --glass-border: 255 255 255 / 0.1;
+    
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -121,6 +120,21 @@ All colors MUST be HSL.
 
   .pixel-button {
     @apply pixel-border px-6 py-3 font-bold transition-transform hover:translate-y-[-2px] active:translate-y-[2px];
+  }
+
+  .glass-card {
+    background: rgba(var(--glass-bg));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--glass-border));
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .glass-input {
+    background: rgba(var(--glass-bg));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(var(--glass-border));
   }
 
   .accessibility-setting {
