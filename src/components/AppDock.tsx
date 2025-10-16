@@ -6,10 +6,13 @@ import {
   Network,
   MessageSquare,
   Settings,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { Dock, DockIcon, DockItem, DockLabel } from '@/components/Dock';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AccessibilitySettings } from '@/components/AccessibilitySettings';
+import { useTheme } from '@/components/providers/ThemeProvider';
 
 export function AppDock() {
   const navigate = useNavigate();

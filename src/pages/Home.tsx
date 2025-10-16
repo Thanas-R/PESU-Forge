@@ -94,7 +94,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="container mx-auto px-4 pt-12 md:pt-20 pb-16 md:pb-24 text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6 drop-shadow-2xl tracking-tight">
-            NoteForge
+            PESU Forge
           </h1>
           <p className="text-lg md:text-2xl text-white/90 mb-12 md:mb-16 drop-shadow-lg font-medium max-w-3xl mx-auto">
             Transform your notes into engaging learning experiences
