@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 
 interface FlashCard {
@@ -96,34 +95,32 @@ export default function FlashCards() {
         </div>
 
         <div className="perspective-1000">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ rotateY: 0 }}
-              animate={{ rotateY: isFlipped ? 180 : 0 }}
-              transition={{ duration: 0.6 }}
-              style={{ transformStyle: 'preserve-3d' }}
-              className="cursor-pointer"
-              onClick={() => setIsFlipped(!isFlipped)}
-            >
-              <Card className="min-h-[300px] p-8 pixel-border bg-card flex items-center justify-center relative">
-                <div
-                  className="text-center"
-                  style={{
-                    backfaceVisibility: 'hidden',
-                    transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0)',
-                  }}
-                >
-                  <p className="text-2xl font-bold mb-4 pixel-font">
-                    {isFlipped ? currentCard.answer : currentCard.question}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {isFlipped ? 'Click to see question' : 'Click to reveal answer'}
-                  </p>
-                </div>
-              </Card>
-            </motion.div>
-          </AnimatePresence>
+          <div
+            key={currentIndex}
+            className="cursor-pointer transition-transform duration-500"
+            style={{
+              transformStyle: 'preserve-3d',
+              transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0)',
+            }}
+            onClick={() => setIsFlipped(!isFlipped)}
+          >
+            <Card className="min-h-[300px] p-8 pixel-border bg-card flex items-center justify-center relative">
+              <div
+                className="text-center"
+                style={{
+                  backfaceVisibility: 'hidden',
+                  transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0)',
+                }}
+              >
+                <p className="text-2xl font-bold mb-4 pixel-font">
+                  {isFlipped ? currentCard.answer : currentCard.question}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {isFlipped ? 'Click to see question' : 'Click to reveal answer'}
+                </p>
+              </div>
+            </Card>
+          </div>
         </div>
 
         <div className="flex justify-between items-center">

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 
 interface MemoryCard {
@@ -116,12 +115,10 @@ export default function Memory() {
 
         <div className="grid grid-cols-3 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
           {cards.map((card, idx) => (
-            <motion.div
+            <div
               key={card.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
               onClick={() => handleCardClick(idx)}
-              className="cursor-pointer"
+              className="cursor-pointer hover:scale-105 active:scale-95 transition-transform"
             >
               <Card
                 className={`aspect-square flex items-center justify-center p-4 pixel-border transition-all ${
@@ -136,7 +133,7 @@ export default function Memory() {
                   {card.isFlipped || card.isMatched ? card.content : '?'}
                 </div>
               </Card>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
