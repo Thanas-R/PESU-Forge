@@ -68,27 +68,23 @@ function Dock({
 
   return (
     <div
-      style={{
+      onMouseMove={({ pageX }) => setMouseX(pageX)}
+      onMouseLeave={() => setMouseX(Infinity)}
+      className={cn(
+        'flex w-fit gap-2 rounded-3xl glass-card px-4 py-3 transition-all shadow-2xl backdrop-blur-xl',
+        className
+      )}
+      style={{ 
         height: panelHeight,
-        scrollbarWidth: 'none',
+        pointerEvents: 'auto',
+        touchAction: 'manipulation'
       }}
-      className='mx-2 flex max-w-full items-end overflow-x-auto'
+      role='toolbar'
+      aria-label='Application dock'
     >
-      <div
-        onMouseMove={({ pageX }) => setMouseX(pageX)}
-        onMouseLeave={() => setMouseX(Infinity)}
-        className={cn(
-          'mx-auto flex w-fit gap-3 rounded-3xl glass-card px-6 py-3 transition-all shadow-2xl',
-          className
-        )}
-        style={{ height: panelHeight }}
-        role='toolbar'
-        aria-label='Application dock'
-      >
-        <DockProvider value={{ mouseX, distance, magnification }}>
-          {children}
-        </DockProvider>
-      </div>
+      <DockProvider value={{ mouseX, distance, magnification }}>
+        {children}
+      </DockProvider>
     </div>
   );
 }

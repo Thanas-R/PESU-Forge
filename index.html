@@ -1,9 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PESU-AI Student Helper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+      // Set dark mode as default before paint
+      (function() {
+        try {
+          const stored = localStorage.getItem('pesu-theme');
+          if (!stored) {
+            localStorage.setItem('pesu-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.toggle('dark', stored === 'dark');
+          }
+        } catch(e){}
+      })();
+    </script>
     <meta name="description" content="Transform your notes into engaging learning experiences with AI-powered educational games" />
     <meta name="author" content="PESU Students" />
 
