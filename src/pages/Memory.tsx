@@ -19,26 +19,37 @@ export default function Memory() {
 
   useEffect(() => {
     const content = localStorage.getItem('learning-content');
-    if (!content) {
+    if (!content || content.trim().length < 50) {
       toast({
         title: 'No content found',
-        description: 'Please upload content from the home page first.',
+        description: 'Please upload content from the home page first (min 50 chars).',
         variant: 'destructive',
       });
       setIsLoading(false);
       return;
     }
 
-    // Mock card generation
-    const concepts = ['React', 'Props', 'State', 'JSX', 'Component', 'Hook'];
-    const cardPairs = concepts.flatMap((concept, idx) => [
-      { id: idx * 2, content: concept, isFlipped: false, isMatched: false },
-      { id: idx * 2 + 1, content: concept, isFlipped: false, isMatched: false },
-    ]);
-
-    const shuffled = cardPairs.sort(() => Math.random() - 0.5);
-    setCards(shuffled);
-    setIsLoading(false);
+    (async () => {
+      try {
+        const { data, error } = await (await import('@/integrations/supabase/client')).supabase.functions.invoke('generate-learning', {
+          body: { content, type: 'memory' },
+        });
+        if (error) throw error;
+        const concepts: string[] = data?.concepts || [];
+        const limited = concepts.slice(0, 6).length ? concepts.slice(0,6) : ['Concept A','Concept B','Concept C','Concept D','Concept E','Concept F'];
+        const cardPairs = limited.flatMap((concept, idx) => ([
+          { id: idx * 2, content: concept, isFlipped: false, isMatched: false },
+          { id: idx * 2 + 1, content: concept, isFlipped: false, isMatched: false },
+        ]));
+        const shuffled = cardPairs.sort(() => Math.random() - 0.5);
+        setCards(shuffled);
+      } catch(e) {
+        console.error(e);
+        toast({ title: 'Failed to generate memory game', variant: 'destructive' });
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, [toast]);
 
   const handleCardClick = (id: number) => {

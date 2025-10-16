@@ -105,6 +105,7 @@ All colors MUST be HSL.
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     font-size: var(--base-font-size, 16px);
+    scroll-behavior: smooth;
   }
 
   /* Accessibility: Dyslexic Font */
@@ -163,11 +164,11 @@ All colors MUST be HSL.
   }
 
   .glass-card {
-    background: rgba(var(--glass-bg));
+    background-color: color-mix(in hsl, hsl(var(--background)) 70%, white 30% / 10%);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(var(--glass-border));
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.18);
   }
 
   .glass-input {
