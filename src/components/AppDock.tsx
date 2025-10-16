@@ -27,32 +27,32 @@ export function AppDock() {
   const navItems = [
     {
       title: 'Home',
-      icon: <Home className='h-full w-full text-foreground' />,
+      icon: <Home className='w-full h-full text-foreground' />,
       href: '/',
     },
     {
       title: 'Flash Cards',
-      icon: <BookOpen className='h-full w-full text-foreground' />,
+      icon: <BookOpen className='w-full h-full text-foreground' />,
       href: '/flashcards',
     },
     {
       title: 'Quiz',
-      icon: <Brain className='h-full w-full text-foreground' />,
+      icon: <Brain className='w-full h-full text-foreground' />,
       href: '/quiz',
     },
     {
       title: 'Memory Match',
-      icon: <Gamepad2 className='h-full w-full text-foreground' />,
+      icon: <Gamepad2 className='w-full h-full text-foreground' />,
       href: '/memory',
     },
     {
       title: 'Thoughtscape',
-      icon: <Network className='h-full w-full text-foreground' />,
+      icon: <Network className='w-full h-full text-foreground' />,
       href: '/thoughtscape',
     },
     {
       title: 'Ask PESU',
-      icon: <MessageSquare className='h-full w-full text-foreground' />,
+      icon: <MessageSquare className='w-full h-full text-foreground' />,
       href: '/chat',
     },
   ];
@@ -66,30 +66,36 @@ export function AppDock() {
             onClick={() => navigate(item.href)}
           >
             <DockItem
-              className={`aspect-square rounded-full ${
+              className={`aspect-square rounded-full transition-all cursor-pointer ${
                 location.pathname === item.href
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted hover:bg-muted/80'
-              } transition-colors cursor-pointer`}
+                  ? 'bg-primary/90 shadow-lg shadow-primary/50'
+                  : 'bg-background/80 hover:bg-background'
+              }`}
             >
               <DockLabel>{item.title}</DockLabel>
-              <DockIcon>{item.icon}</DockIcon>
+              <DockIcon>
+                <div className="flex items-center justify-center w-5 h-5">
+                  {item.icon}
+                </div>
+              </DockIcon>
             </DockItem>
           </div>
         ))}
         
         <div onClick={toggleTheme}>
-          <DockItem className='aspect-square rounded-full bg-secondary hover:bg-secondary/80 transition-colors cursor-pointer'>
+          <DockItem className='aspect-square rounded-full bg-background/80 hover:bg-background transition-all cursor-pointer'>
             <DockLabel>
               Theme: {theme === 'system' ? 'System' : theme === 'dark' ? 'Dark' : 'Light'}
             </DockLabel>
             <DockIcon>
-              <SunMoon className='h-full w-full text-secondary-foreground' />
+              <div className="flex items-center justify-center w-5 h-5">
+                <SunMoon className='h-full w-full text-foreground' />
+              </div>
             </DockIcon>
           </DockItem>
         </div>
 
-        <DockItem className='aspect-square rounded-full'>
+        <DockItem className='aspect-square rounded-full bg-background/80 hover:bg-background transition-all'>
           <DockLabel>Settings</DockLabel>
           <DockIcon>
             <div className="flex items-center justify-center w-full h-full">
