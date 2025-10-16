@@ -100,10 +100,50 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-mono;
+    @apply bg-background text-foreground font-sans;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
+    font-size: var(--base-font-size, 16px);
+  }
+
+  /* Accessibility: Dyslexic Font */
+  html[data-dyslexic-font="true"] body {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif;
+  }
+
+  /* Accessibility: Reduced Motion */
+  html[data-reduce-motion="true"] * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Accessibility: High Contrast */
+  html[data-high-contrast="true"] {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
+    --primary: 210 100% 70%;
+    --primary-foreground: 0 0% 0%;
+    --accent: 340 100% 70%;
+    --border: 0 0% 100%;
+  }
+
+  /* Accessibility: Show Focus Rings */
+  html[data-show-focus="true"] *:focus {
+    outline: 3px solid hsl(var(--primary)) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Accessibility: Font Size Control */
+  html[data-font-size="large"] {
+    --base-font-size: 18px;
+  }
+
+  html[data-font-size="x-large"] {
+    --base-font-size: 20px;
   }
 
   .pixel-font {

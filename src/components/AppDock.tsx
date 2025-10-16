@@ -31,7 +31,7 @@ export function AppDock() {
       href: '/',
     },
     {
-      title: 'Flash Cards',
+      title: 'Notes & Flash Cards',
       icon: <BookOpen className='w-full h-full text-foreground' />,
       href: '/flashcards',
     },
@@ -50,26 +50,24 @@ export function AppDock() {
       icon: <Network className='w-full h-full text-foreground' />,
       href: '/thoughtscape',
     },
-    {
-      title: 'Ask PESU',
-      icon: <MessageSquare className='w-full h-full text-foreground' />,
-      href: '/chat',
-    },
   ];
 
   return (
-    <div className='fixed bottom-4 left-1/2 -translate-x-1/2 z-50 max-w-full'>
-      <Dock className='items-end pb-3'>
+    <div 
+      className='fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]' 
+      style={{ pointerEvents: 'none' }}
+    >
+      <Dock className='items-center' panelHeight={56} magnification={64} distance={120}>
         {navItems.map((item, idx) => (
           <div
             key={idx}
             onClick={() => navigate(item.href)}
           >
             <DockItem
-              className={`aspect-square rounded-full transition-all cursor-pointer ${
+              className={`aspect-square rounded-2xl transition-all cursor-pointer border ${
                 location.pathname === item.href
-                  ? 'bg-primary/90 shadow-lg shadow-primary/50'
-                  : 'bg-background/80 hover:bg-background'
+                  ? 'bg-primary/20 border-primary/40 shadow-lg shadow-primary/30'
+                  : 'bg-background/60 border-border/40 hover:bg-background/80 hover:border-border/60'
               }`}
             >
               <DockLabel>{item.title}</DockLabel>
@@ -82,8 +80,10 @@ export function AppDock() {
           </div>
         ))}
         
+        <div className="w-px h-8 bg-border/40 mx-1" />
+        
         <div onClick={toggleTheme}>
-          <DockItem className='aspect-square rounded-full bg-background/80 hover:bg-background transition-all cursor-pointer'>
+          <DockItem className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-all cursor-pointer'>
             <DockLabel>
               Theme: {theme === 'system' ? 'System' : theme === 'dark' ? 'Dark' : 'Light'}
             </DockLabel>
@@ -95,7 +95,7 @@ export function AppDock() {
           </DockItem>
         </div>
 
-        <DockItem className='aspect-square rounded-full bg-background/80 hover:bg-background transition-all'>
+        <DockItem className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-all'>
           <DockLabel>Settings</DockLabel>
           <DockIcon>
             <div className="flex items-center justify-center w-full h-full">

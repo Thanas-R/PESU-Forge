@@ -25,16 +25,16 @@ export const AccessibilitySettings = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button
-          className="p-3 rounded-full bg-primary text-primary-foreground hover:scale-110 transition-transform pixel-border"
+        <div
+          className="w-full h-full flex items-center justify-center cursor-pointer"
           aria-label="Accessibility Settings"
         >
-          <Settings className="h-6 w-6" />
-        </button>
+          <Settings className="h-5 w-5 text-foreground" />
+        </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md bg-card pixel-border">
+      <DialogContent className="sm:max-w-md bg-card/95 backdrop-blur-xl rounded-2xl border border-white/10">
         <DialogHeader>
-          <DialogTitle className="pixel-font text-2xl flex items-center gap-2">
+          <DialogTitle className="text-2xl flex items-center gap-2 font-bold">
             <Settings className="h-6 w-6" />
             Accessibility
           </DialogTitle>
@@ -42,7 +42,7 @@ export const AccessibilitySettings = () => {
         
         <div className="space-y-6 py-4">
           <div className="space-y-2 accessibility-setting">
-            <Label htmlFor="font-size" className="pixel-font">
+            <Label htmlFor="font-size" className="font-medium">
               Font Size: {fontSize}px
             </Label>
             <Slider
@@ -57,7 +57,7 @@ export const AccessibilitySettings = () => {
           </div>
 
           <div className="flex items-center justify-between accessibility-setting">
-            <Label htmlFor="dyslexic-font" className="pixel-font">
+            <Label htmlFor="dyslexic-font" className="font-medium">
               OpenDyslexic Font
             </Label>
             <Switch
@@ -68,7 +68,7 @@ export const AccessibilitySettings = () => {
           </div>
 
           <div className="flex items-center justify-between accessibility-setting">
-            <Label htmlFor="reduced-motion" className="pixel-font">
+            <Label htmlFor="reduced-motion" className="font-medium">
               Reduced Motion
             </Label>
             <Switch
@@ -79,7 +79,7 @@ export const AccessibilitySettings = () => {
           </div>
 
           <div className="flex items-center justify-between accessibility-setting">
-            <Label htmlFor="high-contrast" className="pixel-font">
+            <Label htmlFor="high-contrast" className="font-medium">
               High Contrast
             </Label>
             <Switch
@@ -91,7 +91,7 @@ export const AccessibilitySettings = () => {
 
           <div className="space-y-4 accessibility-setting">
             <div className="flex items-center justify-between">
-              <Label htmlFor="tts-enabled" className="pixel-font">
+              <Label htmlFor="tts-enabled" className="font-medium">
                 Enable Text-to-Speech
               </Label>
               <Switch
@@ -103,7 +103,7 @@ export const AccessibilitySettings = () => {
 
             {ttsEnabled && (
               <div className="space-y-2">
-                <Label htmlFor="tts-voice" className="pixel-font">
+                <Label htmlFor="tts-voice" className="font-medium">
                   Text-to-Speech Voice
                 </Label>
                 <Select value={ttsVoice} onValueChange={setTtsVoice}>
