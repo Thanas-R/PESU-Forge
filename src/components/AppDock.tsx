@@ -53,14 +53,14 @@ export function AppDock() {
       className='fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]' 
       style={{ pointerEvents: 'none' }}
     >
-      <Dock className='items-center' panelHeight={56} magnification={80} distance={150}>
+      <Dock className='items-center' panelHeight={56} magnification={60} distance={100}>
         {navItems.map((item, idx) => (
           <div
             key={idx}
             onClick={() => navigate(item.href)}
           >
             <DockItem
-              className={`aspect-square rounded-2xl transition-all cursor-pointer border ${
+              className={`aspect-square rounded-2xl transition-none cursor-pointer border ${
                 location.pathname === item.href
                   ? 'bg-primary/20 border-primary/40 shadow-lg shadow-primary/30'
                   : 'bg-background/60 border-border/40 hover:bg-background/80 hover:border-border/60'
@@ -80,7 +80,7 @@ export function AppDock() {
 
         {/* Theme toggle */}
         <DockItem
-          className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-all cursor-pointer'
+          className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-none cursor-pointer'
         >
           <DockLabel>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</DockLabel>
           <DockIcon>
@@ -94,7 +94,7 @@ export function AppDock() {
           </DockIcon>
         </DockItem>
 
-        <DockItem className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-all'>
+        <DockItem className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-none'>
           <DockLabel>Settings</DockLabel>
           <DockIcon>
             <div className="flex items-center justify-center w-full h-full">
