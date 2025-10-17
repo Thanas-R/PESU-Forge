@@ -285,13 +285,13 @@ export default function Thoughtscape() {
               className="bg-background/50 rounded-lg"
             >
               <Background className="dark:bg-background/10" />
-              <Controls className="!bg-card !border-border !shadow-lg [&_button]:!bg-card [&_button]:!border-border [&_button]:!text-foreground hover:[&_button]:!bg-accent" />
+              <Controls className="!bg-card/90 !border-border/50 !shadow-lg [&_button]:!bg-card [&_button]:!border-border/50 [&_button]:!text-foreground [&_button:hover]:!bg-accent [&_button]:!shadow-sm" />
               <MiniMap 
                 nodeColor={(node) => {
                   const data = node.data as { color?: string };
                   return data.color || '#6366f1';
                 }}
-                className="!bg-card/80 !border !border-border"
+                className="!bg-card/90 !border !border-border/50 !shadow-lg"
               />
             </ReactFlow>
           </Card>
