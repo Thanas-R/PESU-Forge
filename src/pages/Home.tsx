@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, FileText, MessageSquare, X } from 'lucide-react';
+import { Upload, FileText, MessageSquare, X, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';
@@ -296,17 +296,31 @@ export default function Home() {
             <div className="glass-card p-8 md:p-12 rounded-2xl shadow-2xl max-w-5xl mx-auto backdrop-blur-xl border border-white/10">
               <h2 className="text-3xl md:text-5xl font-bold mb-8 text-center">ABOUT US</h2>
               <div className="glass-card p-6 md:p-8 rounded-xl bg-card/40 border border-white/5">
-                <h3 className="text-2xl md:text-3xl mb-6 text-primary font-bold">PROUD PESU STUDENTS</h3>
-                <div className="space-y-4 text-sm md:text-lg">
-                  <p className="text-foreground">
-                    Thanas R AIML • 2025-29
-                  </p>
-                  <p className="text-foreground">
-                    Tanay S CSE • 2025-29
-                  </p>
-                  <p className="text-foreground">
-                    T N Pranav CSE • 2025-29
-                  </p>
+              <h3 className="text-2xl md:text-3xl mb-6 text-primary font-bold">PROUD PESU STUDENTS</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <span className="text-white font-bold text-base md:text-lg">Thanas R</span>
+                      <span className="text-muted-foreground text-sm md:text-base ml-2">AIML • 2025-29</span>
+                    </div>
+                    <a 
+                      href="https://github.com/Thanas-R?tab=repositories" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:text-primary transition-colors"
+                      aria-label="Thanas R's GitHub"
+                    >
+                      <Github className="h-4 w-4" />
+                    </a>
+                  </div>
+                  <div>
+                    <span className="text-white font-bold text-base md:text-lg">Tanay S</span>
+                    <span className="text-muted-foreground text-sm md:text-base ml-2">CSE • 2025-29</span>
+                  </div>
+                  <div>
+                    <span className="text-white font-bold text-base md:text-lg">T N Pranav</span>
+                    <span className="text-muted-foreground text-sm md:text-base ml-2">CSE • 2025-29</span>
+                  </div>
                 </div>
                 <p className="mt-8 text-muted-foreground leading-relaxed text-sm md:text-base">
                   Created to help PESU students prepare quickly with their short notes and study materials.
