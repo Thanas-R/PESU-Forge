@@ -15,6 +15,8 @@ export default function Home() {
   const featuresRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -128,8 +130,8 @@ export default function Home() {
         }}
       />
       
-      {/* Gradient Overlay - more transparent for vibrancy */}
-      <div className="fixed inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background/70" />
+      {/* Gradient Overlay - darker tint in light mode, transparent in dark mode */}
+      <div className="fixed inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background/70 dark:from-background/70 dark:via-background/80 dark:to-background/90" />
       
       <div className="relative z-10 pb-24">
         {/* Top Navigation */}
@@ -165,22 +167,22 @@ export default function Home() {
           {/* Upload Card */}
           <div className="max-w-2xl mx-auto glass-card p-6 md:p-10 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/10">
             <div className="space-y-6">
-              <label className="cursor-pointer">
-                <input
-                  type="file"
-                  accept=".txt,.docx"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                  multiple
-                />
-                <Button
-                  disabled={isUploading}
-                  className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
-                >
-                  <Upload className="mr-2 h-5 w-5" />
-                  {isUploading ? 'Uploading...' : 'Upload File'}
-                </Button>
-              </label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".txt,.docx"
+                onChange={handleFileUpload}
+                className="hidden"
+                multiple
+              />
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
+              >
+                <Upload className="mr-2 h-5 w-5" />
+                {isUploading ? 'Uploading...' : 'Upload File'}
+              </Button>
 
               {uploadedFiles.length > 0 && (
                 <div className="space-y-2">
