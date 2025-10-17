@@ -8,17 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
-      // Set dark mode as default before paint
+      // Force dark mode before paint on every load
       (function() {
         try {
-          const stored = localStorage.getItem('pesu-theme');
-          if (!stored) {
-            localStorage.setItem('pesu-theme', 'dark');
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.toggle('dark', stored === 'dark');
-          }
-        } catch(e){}
+          localStorage.setItem('pesu-theme', 'dark');
+          const root = document.documentElement;
+          root.classList.remove('light');
+          root.classList.add('dark');
+        } catch (e) {}
       })();
     </script>
     <meta name="description" content="Transform your notes into engaging learning experiences with AI-powered educational games" />

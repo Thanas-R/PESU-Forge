@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { ReactFlow, Background, Controls, MiniMap, Node, Edge, addEdge, Connection, useNodesState, useEdgesState } from '@xyflow/react';
+import { ReactFlow, Background, Controls, MiniMap, Node, Edge, addEdge, Connection, useNodesState, useEdgesState, MarkerType } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -8,7 +8,8 @@ import { Upload, Sparkles, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CustomNode } from '@/components/CustomNode';
 import { supabase } from '@/integrations/supabase/client';
-
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import mammoth from 'mammoth/mammoth.browser';
 const nodeTypes = {
   custom: CustomNode,
 };
