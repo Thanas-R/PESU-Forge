@@ -12,14 +12,8 @@ export const AccessibilityManager = () => {
   useEffect(() => {
     const html = document.documentElement;
     
-    // Apply font size
-    if (fontSize >= 20) {
-      html.setAttribute('data-font-size', 'x-large');
-    } else if (fontSize >= 18) {
-      html.setAttribute('data-font-size', 'large');
-    } else {
-      html.removeAttribute('data-font-size');
-    }
+    // Apply zoom
+    html.style.zoom = `${fontSize}%`;
 
     // Apply dyslexic font
     if (dyslexicFont) {

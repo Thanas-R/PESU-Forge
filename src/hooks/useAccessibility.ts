@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { useEffect } from 'react';
 
 interface AccessibilityState {
   fontSize: number;
@@ -17,7 +16,7 @@ interface AccessibilityState {
   setTtsVoice: (voice: string) => void;
 }
 
-const useAccessibilityStore = create<AccessibilityState>()(
+export const useAccessibility = create<AccessibilityState>()(
   persist(
     (set) => ({
       fontSize: 100,
@@ -38,29 +37,3 @@ const useAccessibilityStore = create<AccessibilityState>()(
     }
   )
 );
-
-export const useAccessibility = () => {
-  const state = useAccessibilityStore();
-  
-  useEffect(() => {
-    // Apply zoom
-    document.documentElement.style.zoom = `${state.fontSize}%`;
-  }, [state.fontSize]);
-  
-  useEffect(() => {
-    // Apply dyslexic font
-    document.documentElement.setAttribute('data-dyslexic-font', String(state.dyslexicFont));
-  }, [state.dyslexicFont]);
-  
-  useEffect(() => {
-    // Apply reduced motion
-    document.documentElement.setAttribute('data-reduce-motion', String(state.reducedMotion));
-  }, [state.reducedMotion]);
-  
-  useEffect(() => {
-    // Apply high contrast
-    document.documentElement.setAttribute('data-high-contrast', String(state.highContrast));
-  }, [state.highContrast]);
-  
-  return state;
-};
