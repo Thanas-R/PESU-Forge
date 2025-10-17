@@ -86,7 +86,7 @@ export function AppDock() {
           <DockIcon>
             <button
               aria-label="Toggle theme"
-              className="flex items-center justify-center w-5 h-5"
+              className="flex items-center justify-center w-full h-full"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
               {theme === 'dark' ? <Sun className='w-5 h-5' /> : <Moon className='w-5 h-5' />}
