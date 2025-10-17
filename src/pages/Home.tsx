@@ -213,7 +213,11 @@ export default function Home() {
               <Textarea
                 placeholder="Paste your notes, study materials, or any content you want to learn..."
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
+                onChange={(e) => {
+                  const newContent = e.target.value;
+                  setContent(newContent);
+                  localStorage.setItem('learning-content', newContent);
+                }}
                 className="min-h-[150px] md:min-h-[200px] resize-none glass-input text-sm md:text-base p-4 rounded-xl border-2 border-white/10 focus:border-primary/50 transition-all bg-background/40"
               />
 
@@ -243,15 +247,6 @@ export default function Home() {
                 { title: 'THOUGHTSCAPE', desc: 'Visual mind maps of your content', icon: '🌐', route: '/thoughtscape' },
               ].map((feature, idx) => {
                 const handleClick = () => {
-                  const savedContent = localStorage.getItem('learning-content');
-                  if (!savedContent || savedContent.trim().length < 50) {
-                    toast({
-                      title: 'No content available',
-                      description: 'Please upload or paste your learning content first (minimum 50 characters).',
-                      variant: 'destructive',
-                    });
-                    return;
-                  }
                   navigate(feature.route);
                 };
 
