@@ -27,14 +27,13 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const getInitialTheme = (): Theme => {
-    if (typeof window === 'undefined') return defaultTheme;
+    if (typeof window === 'undefined') return 'dark';
     try {
       const stored = localStorage.getItem(storageKey) as Theme | null;
       if (stored === 'light' || stored === 'dark') return stored;
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
-      return defaultTheme;
+      return 'dark'; // Default to dark mode
     } catch {
-      return defaultTheme;
+      return 'dark';
     }
   };
 
