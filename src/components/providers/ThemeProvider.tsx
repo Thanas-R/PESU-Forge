@@ -22,13 +22,13 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
-  defaultTheme = 'dark',
+  defaultTheme = 'light',
   storageKey = 'pesu-theme',
   ...props
 }: ThemeProviderProps) {
   const getInitialTheme = (): Theme => {
-    // Always default to dark mode
-    return 'dark';
+    const stored = localStorage.getItem(storageKey) as Theme | null;
+    return stored || defaultTheme;
   };
 
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());

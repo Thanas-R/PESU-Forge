@@ -29,6 +29,7 @@ export default function Thoughtscape() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [inputText, setInputText] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedNode, setSelectedNode] = useState<any>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -71,12 +72,17 @@ export default function Thoughtscape() {
           description: 'Could not extract concepts from the content.',
           variant: 'destructive',
         });
+        setIsGenerating(false);
         return;
       }
 
       // Create a hierarchical structure
       const newNodes: Node[] = [];
       const newEdges: Edge[] = [];
+
+      const handleNodeOpen = (nodeData: any) => {
+        setSelectedNode(nodeData);
+      };
 
       // Main topic node at the top
       const mainTopic = concepts[0];
@@ -86,9 +92,11 @@ export default function Thoughtscape() {
         position: { x: 400, y: 50 },
         data: {
           label: mainTopic,
-          description: 'Main Topic',
+          description: 'Central concept from your input',
           badge: 'Core',
           color: colorPalette[0],
+          details: `Main topic: ${mainTopic}. This is the central theme extracted from your study material.`,
+          onOpen: handleNodeOpen,
         },
       });
 
@@ -109,9 +117,11 @@ export default function Thoughtscape() {
           position: { x, y },
           data: {
             label: remainingConcepts[i],
-            description: 'Key Concept',
+            description: `Key concept derived from ${mainTopic}`,
             badge: 'Category',
             color: colorPalette[(i + 1) % colorPalette.length],
+            details: `This is a major branch of ${mainTopic}. It represents an important subcategory to explore further.`,
+            onOpen: handleNodeOpen,
           },
         });
 
@@ -120,7 +130,9 @@ export default function Thoughtscape() {
           source: '0',
           target: nodeId,
           animated: true,
-          style: { stroke: '#94a3b8' },
+          type: 'smoothstep',
+          markerEnd: { type: MarkerType.ArrowClosed, color: '#94a3b8' },
+          style: { stroke: '#94a3b8', strokeWidth: 2 },
         });
       }
 
@@ -173,30 +185,48 @@ export default function Thoughtscape() {
     }
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const content = e.target?.result as string;
-      setInputText(content);
-      toast({
-        title: 'File uploaded',
-        description: `Loaded ${file.name}`,
-      });
-    };
-    reader.readAsText(file);
+    if (file.name.endsWith('.docx')) {
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        setInputText(result.value);
+        toast({
+          title: 'File uploaded',
+          description: `Loaded ${file.name}`,
+        });
+      } catch (error) {
+        toast({
+          title: 'Upload failed',
+          description: 'Could not read .docx file',
+          variant: 'destructive',
+        });
+      }
+    } else {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target?.result as string;
+        setInputText(content);
+        toast({
+          title: 'File uploaded',
+          description: `Loaded ${file.name}`,
+        });
+      };
+      reader.readAsText(file);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/20 to-secondary/20">
       <div className="container mx-auto py-6 px-4">
-        <h1 className="pixel-font text-4xl mb-6 text-center">Thoughtscape</h1>
+        <h1 className="pixel-font text-4xl mb-6 text-center text-foreground">Thoughtscape</h1>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[calc(100vh-120px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-120px)]">
           {/* Input Panel */}
-          <Card className="p-6 glass-card flex flex-col gap-4">
+          <Card className="p-6 glass-card flex flex-col gap-4 lg:col-span-1">
             <div className="flex items-center gap-2 mb-2">
               <FileText className="h-5 w-5" />
               <h2 className="text-xl font-bold">Input Zone</h2>
@@ -221,7 +251,7 @@ export default function Thoughtscape() {
               <input
                 id="file-upload"
                 type="file"
-                accept=".txt,.md"
+                accept=".txt,.md,.docx"
                 onChange={handleFileUpload}
                 className="hidden"
               />
@@ -243,7 +273,7 @@ export default function Thoughtscape() {
           </Card>
 
           {/* React Flow Canvas */}
-          <Card className="lg:col-span-2 p-2 glass-card overflow-hidden">
+          <Card className="lg:col-span-3 p-2 glass-card overflow-hidden">
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -254,19 +284,55 @@ export default function Thoughtscape() {
               fitView
               className="bg-background/50 rounded-lg"
             >
-              <Background />
-              <Controls />
+              <Background className="dark:bg-background/10" />
+              <Controls className="!bg-card !border-border !shadow-lg [&_button]:!bg-card [&_button]:!border-border [&_button]:!text-foreground hover:[&_button]:!bg-accent" />
               <MiniMap 
                 nodeColor={(node) => {
                   const data = node.data as { color?: string };
                   return data.color || '#6366f1';
                 }}
-                className="!bg-background/80"
+                className="!bg-card/80 !border !border-border"
               />
             </ReactFlow>
           </Card>
         </div>
       </div>
+
+      {/* Node Details Dialog */}
+      <Dialog open={!!selectedNode} onOpenChange={() => setSelectedNode(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl flex items-center gap-2">
+              <div 
+                className="w-4 h-4 rounded-full" 
+                style={{ backgroundColor: selectedNode?.color || '#6366f1' }}
+              />
+              {selectedNode?.label}
+            </DialogTitle>
+            <DialogDescription className="text-base">
+              {selectedNode?.badge && (
+                <span className="inline-block px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium mb-3">
+                  {selectedNode.badge}
+                </span>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {selectedNode?.description && (
+              <div>
+                <h4 className="font-semibold mb-2 text-foreground">Overview</h4>
+                <p className="text-muted-foreground">{selectedNode.description}</p>
+              </div>
+            )}
+            {selectedNode?.details && (
+              <div>
+                <h4 className="font-semibold mb-2 text-foreground">Details</h4>
+                <p className="text-muted-foreground leading-relaxed">{selectedNode.details}</p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
