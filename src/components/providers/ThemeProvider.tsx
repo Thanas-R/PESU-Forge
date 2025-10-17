@@ -26,9 +26,19 @@ export function ThemeProvider({
   storageKey = 'pesu-theme',
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
+  const getInitialTheme = (): Theme => {
+    if (typeof window === 'undefined') return defaultTheme;
+    try {
+      const stored = localStorage.getItem(storageKey) as Theme | null;
+      if (stored === 'light' || stored === 'dark') return stored;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+      return defaultTheme;
+    } catch {
+      return defaultTheme;
+    }
+  };
+
+  const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
 
   useEffect(() => {
     const root = window.document.documentElement;
