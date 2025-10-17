@@ -130,8 +130,8 @@ export default function Home() {
         }}
       />
       
-      {/* Gradient Overlay - darker in light mode for better contrast */}
-      <div className="fixed inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/60 dark:from-background/30 dark:via-background/50 dark:to-background/70" />
+      {/* Gradient Overlay */}
+      <div className="fixed inset-0 bg-gradient-to-b from-black/50 via-black/55 to-black/65 dark:from-background/30 dark:via-background/50 dark:to-background/70" />
       
       <div className="relative z-10 pb-24">
         {/* Top Navigation */}
