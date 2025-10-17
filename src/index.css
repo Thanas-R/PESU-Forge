@@ -36,8 +36,8 @@ All colors MUST be HSL.
     --input: 220 20% 88%;
     --ring: 210 100% 56%;
     
-    --glass-bg: 0 0 0 / 0.4;
-    --glass-border: 255 255 255 / 0.15;
+    --glass-bg: 255 255 255 / 0.3;
+    --glass-border: 220 20% 60%;
     
     --pixel-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
     --radius: 0.75rem;
