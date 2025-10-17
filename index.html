@@ -8,13 +8,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
-      // Force dark mode before paint on every load
+      // Set light mode as default
       (function() {
         try {
-          localStorage.setItem('pesu-theme', 'dark');
+          const stored = localStorage.getItem('pesu-theme');
+          if (!stored) {
+            localStorage.setItem('pesu-theme', 'light');
+          }
           const root = document.documentElement;
-          root.classList.remove('light');
-          root.classList.add('dark');
+          root.classList.toggle('dark', localStorage.getItem('pesu-theme') === 'dark');
         } catch (e) {}
       })();
     </script>
