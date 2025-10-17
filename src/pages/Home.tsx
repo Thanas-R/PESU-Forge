@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Upload, FileText, MessageSquare } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Upload, FileText, MessageSquare, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';
@@ -9,47 +9,67 @@ import pixelBackground from '@/assets/pixel-background.png';
 export default function Home() {
   const [content, setContent] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; preview: string }>>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const featuresRef = useRef<HTMLElement>(null);
+  const aboutRef = useRef<HTMLElement>(null);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setIsUploading(true);
-    try {
-      const name = file.name.toLowerCase();
-      const ext = name.split('.').pop() || '';
+    const newFiles: Array<{ name: string; preview: string }> = [];
+    let combinedContent = content;
 
-      if (ext === 'txt') {
-        const text = await file.text();
-        setContent(text);
-      } else if (ext === 'docx') {
-        const ab = await file.arrayBuffer();
-        // Dynamic import to keep bundle light
-        const mammoth = await import('mammoth/mammoth.browser');
-        const result = await mammoth.extractRawText({ arrayBuffer: ab });
-        setContent((result.value || '').trim());
-      } else if (ext === 'doc') {
-        toast({
-          title: 'Legacy .doc not supported',
-          description: 'Please convert to .docx or .txt and try again.',
-          variant: 'destructive',
-        });
-        return;
-      } else {
-        toast({
-          title: 'Unsupported file type',
-          description: 'Use a .txt or .docx file.',
-          variant: 'destructive',
-        });
-        return;
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const name = file.name.toLowerCase();
+        const ext = name.split('.').pop() || '';
+        let extractedText = '';
+
+        if (ext === 'txt') {
+          extractedText = await file.text();
+        } else if (ext === 'docx') {
+          const ab = await file.arrayBuffer();
+          const mammoth = await import('mammoth/mammoth.browser');
+          const result = await mammoth.extractRawText({ arrayBuffer: ab });
+          extractedText = (result.value || '').trim();
+        } else if (ext === 'doc') {
+          toast({
+            title: 'Legacy .doc not supported',
+            description: `${file.name}: Please convert to .docx or .txt and try again.`,
+            variant: 'destructive',
+          });
+          continue;
+        } else {
+          toast({
+            title: 'Unsupported file type',
+            description: `${file.name}: Use a .txt or .docx file.`,
+            variant: 'destructive',
+          });
+          continue;
+        }
+
+        if (extractedText.trim()) {
+          combinedContent += (combinedContent ? '\n\n' : '') + extractedText;
+          newFiles.push({
+            name: file.name,
+            preview: extractedText.slice(0, 200) + (extractedText.length > 200 ? '...' : ''),
+          });
+        }
       }
 
-      toast({
-        title: 'File uploaded successfully!',
-        description: 'Extracted text has been placed into the input below.',
-      });
+      if (newFiles.length > 0) {
+        setContent(combinedContent);
+        setUploadedFiles([...uploadedFiles, ...newFiles]);
+        toast({
+          title: `${newFiles.length} file(s) uploaded successfully!`,
+          description: 'Content has been added to the input below.',
+        });
+      }
     } catch (error) {
       toast({
         title: 'Upload failed',
@@ -58,7 +78,17 @@ export default function Home() {
       });
     } finally {
       setIsUploading(false);
+      e.target.value = '';
     }
+  };
+
+  const removeFile = (index: number) => {
+    const newUploadedFiles = uploadedFiles.filter((_, i) => i !== index);
+    setUploadedFiles(newUploadedFiles);
+  };
+
+  const scrollToSection = (ref: React.RefObject<HTMLElement>) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleSubmit = () => {
@@ -108,12 +138,18 @@ export default function Home() {
             PESU
           </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium">
-            <a href="#features" className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all">
+            <button
+              onClick={() => scrollToSection(featuresRef)}
+              className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all"
+            >
               FEATURES
-            </a>
-            <a href="#about" className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all">
+            </button>
+            <button
+              onClick={() => scrollToSection(aboutRef)}
+              className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all"
+            >
               ABOUT
-            </a>
+            </button>
           </nav>
         </header>
 
@@ -130,20 +166,45 @@ export default function Home() {
           <div className="max-w-2xl mx-auto glass-card p-6 md:p-10 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/10">
             <div className="space-y-6">
               <label className="cursor-pointer">
-                  <input
-                    type="file"
-                    accept=".txt,.docx"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
+                <input
+                  type="file"
+                  accept=".txt,.docx"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  multiple
+                />
                 <Button
                   disabled={isUploading}
-                  className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg transition-all hover:scale-105"
+                  className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
                 >
                   <Upload className="mr-2 h-5 w-5" />
-                  Upload File
+                  {isUploading ? 'Uploading...' : 'Upload File'}
                 </Button>
               </label>
+
+              {uploadedFiles.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Uploaded Files:</p>
+                  {uploadedFiles.map((file, index) => (
+                    <div key={index} className="glass-card p-3 rounded-lg border border-white/10 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium flex items-center gap-2">
+                          <FileText className="h-4 w-4" />
+                          {file.name}
+                        </span>
+                        <button
+                          onClick={() => removeFile(index)}
+                          className="text-muted-foreground hover:text-destructive transition-colors"
+                          aria-label="Remove file"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{file.preview}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               <div className="text-muted-foreground text-sm">Or paste your content here...</div>
 
@@ -157,7 +218,7 @@ export default function Home() {
               <Button
                 onClick={handleSubmit}
                 disabled={!content.trim()}
-                className="w-full text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-secondary hover:bg-secondary/90 text-white rounded-xl shadow-lg transition-all hover:scale-105"
+                className="w-full text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
               >
                 <FileText className="mr-2 h-5 w-5" />
                 Start Learning
@@ -167,7 +228,7 @@ export default function Home() {
         </section>
 
         {/* Learning Modes Section */}
-        <section id="features" className="py-12 md:py-20 px-4">
+        <section ref={featuresRef} id="features" className="py-12 md:py-20 px-4">
           <div className="container mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold mb-12 md:mb-16 text-center text-white drop-shadow-lg">
               LEARNING MODES
@@ -228,24 +289,21 @@ export default function Home() {
         </section>
 
         {/* About Section */}
-        <section id="about" className="py-12 md:py-20 px-4">
+        <section ref={aboutRef} id="about" className="py-12 md:py-20 px-4">
           <div className="container mx-auto">
             <div className="glass-card p-8 md:p-12 rounded-2xl shadow-2xl max-w-5xl mx-auto backdrop-blur-xl border border-white/10">
               <h2 className="text-3xl md:text-5xl font-bold mb-8 text-center">ABOUT US</h2>
               <div className="glass-card p-6 md:p-8 rounded-xl bg-card/40 border border-white/5">
                 <h3 className="text-2xl md:text-3xl mb-6 text-primary font-bold">PROUD PESU STUDENTS</h3>
                 <div className="space-y-4 text-sm md:text-lg">
-                  <p className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <span className="font-bold text-secondary text-lg md:text-xl">Thanas.R</span>
-                    <span className="text-muted-foreground italic">AIML Branch • First Year</span>
+                  <p className="text-foreground">
+                    Thanas R AIML • 2025-29
                   </p>
-                  <p className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <span className="font-bold text-secondary text-lg md:text-xl">Tanay.S</span>
-                    <span className="text-muted-foreground italic">CSE Branch • First Year</span>
+                  <p className="text-foreground">
+                    Tanay S CSE • 2025-29
                   </p>
-                  <p className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <span className="font-bold text-secondary text-lg md:text-xl">TN Pranav</span>
-                    <span className="text-muted-foreground italic">CSE Branch • First Year</span>
+                  <p className="text-foreground">
+                    T N Pranav CSE • 2025-29
                   </p>
                 </div>
                 <p className="mt-8 text-muted-foreground leading-relaxed text-sm md:text-base">

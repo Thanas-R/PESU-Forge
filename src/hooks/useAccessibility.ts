@@ -19,7 +19,7 @@ interface AccessibilityState {
 export const useAccessibility = create<AccessibilityState>()(
   persist(
     (set) => ({
-      fontSize: 16,
+      fontSize: 100,
       dyslexicFont: false,
       reducedMotion: false,
       highContrast: false,
