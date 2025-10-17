@@ -27,14 +27,8 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const getInitialTheme = (): Theme => {
-    if (typeof window === 'undefined') return 'dark';
-    try {
-      const stored = localStorage.getItem(storageKey) as Theme | null;
-      if (stored === 'light' || stored === 'dark') return stored;
-      return 'dark'; // Default to dark mode
-    } catch {
-      return 'dark';
-    }
+    // Always default to dark mode
+    return 'dark';
   };
 
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
