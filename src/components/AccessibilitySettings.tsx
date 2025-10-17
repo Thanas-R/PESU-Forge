@@ -43,13 +43,13 @@ export const AccessibilitySettings = () => {
         <div className="space-y-6 py-4">
           <div className="space-y-2 accessibility-setting">
             <Label htmlFor="font-size" className="font-medium">
-              Font Size: {fontSize}px
+              Zoom: {fontSize}%
             </Label>
             <Slider
               id="font-size"
-              min={12}
-              max={24}
-              step={1}
+              min={80}
+              max={150}
+              step={5}
               value={[fontSize]}
               onValueChange={(value) => setFontSize(value[0])}
               className="w-full"
@@ -80,7 +80,7 @@ export const AccessibilitySettings = () => {
 
           <div className="flex items-center justify-between accessibility-setting">
             <Label htmlFor="high-contrast" className="font-medium">
-              High Contrast
+              Onyx Theme
             </Label>
             <Switch
               id="high-contrast"

@@ -108,10 +108,24 @@ export default function Home() {
             PESU
           </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium">
-            <a href="#features" className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all">
+            <a 
+              href="#features" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all cursor-pointer"
+            >
               FEATURES
             </a>
-            <a href="#about" className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all">
+            <a 
+              href="#about" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all cursor-pointer"
+            >
               ABOUT
             </a>
           </nav>
@@ -235,17 +249,14 @@ export default function Home() {
               <div className="glass-card p-6 md:p-8 rounded-xl bg-card/40 border border-white/5">
                 <h3 className="text-2xl md:text-3xl mb-6 text-primary font-bold">PROUD PESU STUDENTS</h3>
                 <div className="space-y-4 text-sm md:text-lg">
-                  <p className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <span className="font-bold text-secondary text-lg md:text-xl">Thanas.R</span>
-                    <span className="text-muted-foreground italic">AIML Branch • First Year</span>
+                  <p className="text-muted-foreground">
+                    <span className="font-bold text-secondary text-lg md:text-xl">Thanas R</span> AIML • 2025-29
                   </p>
-                  <p className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <span className="font-bold text-secondary text-lg md:text-xl">Tanay.S</span>
-                    <span className="text-muted-foreground italic">CSE Branch • First Year</span>
+                  <p className="text-muted-foreground">
+                    <span className="font-bold text-secondary text-lg md:text-xl">Tanay S</span> CSE • 2025-29
                   </p>
-                  <p className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <span className="font-bold text-secondary text-lg md:text-xl">TN Pranav</span>
-                    <span className="text-muted-foreground italic">CSE Branch • First Year</span>
+                  <p className="text-muted-foreground">
+                    <span className="font-bold text-secondary text-lg md:text-xl">T N Pranav</span> CSE • 2025-29
                   </p>
                 </div>
                 <p className="mt-8 text-muted-foreground leading-relaxed text-sm md:text-base">
