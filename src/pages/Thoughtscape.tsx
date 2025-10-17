@@ -282,6 +282,7 @@ export default function Thoughtscape() {
               onConnect={onConnect}
               nodeTypes={nodeTypes}
               fitView
+              proOptions={{ hideAttribution: true }}
               className="bg-background/50 rounded-lg"
             >
               <Background className="dark:bg-background/10" />
