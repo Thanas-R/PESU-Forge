@@ -8,50 +8,6 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 210 25% 90%;
-    --foreground: 220 18% 20%;
-
-    --card: 0 0% 96%;
-    --card-foreground: 220 18% 20%;
-
-    --popover: 0 0% 96%;
-    --popover-foreground: 220 18% 20%;
-
-    --primary: 210 100% 56%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 280 60% 60%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 210 30% 94%;
-    --muted-foreground: 220 14% 46%;
-
-    --accent: 340 85% 60%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 20% 88%;
-    --input: 220 20% 88%;
-    --ring: 210 100% 56%;
-    
-    --glass-bg: 0 0 0 / 0.4;
-    --glass-border: 255 255 255 / 0.15;
-    --pixel-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
-    --radius: 0.75rem;
-    
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
     --background: 220 25% 18%;
     --foreground: 210 30% 96%;
 
@@ -82,6 +38,50 @@ All colors MUST be HSL.
 
     --glass-bg: 255 255 255 / 0.1;
     --glass-border: 255 255 255 / 0.2;
+    --pixel-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 210 30% 98%;
+    --foreground: 220 18% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 18% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 18% 20%;
+
+    --primary: 210 100% 56%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 280 60% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 30% 94%;
+    --muted-foreground: 220 14% 46%;
+
+    --accent: 340 85% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 88%;
+    --input: 220 20% 88%;
+    --ring: 210 100% 56%;
+    
+    --glass-bg: 0 0 0 / 0.4;
+    --glass-border: 255 255 255 / 0.15;
     
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
