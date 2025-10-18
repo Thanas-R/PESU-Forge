@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useAccessibility } from '@/hooks/useAccessibility';
 import pixelBackground from '@/assets/pixel-background.png';
 
 export default function Home() {
@@ -13,7 +12,6 @@ export default function Home() {
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; preview: string }>>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { reducedMotion } = useAccessibility();
   const featuresRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
 
@@ -180,7 +178,7 @@ export default function Home() {
               <Button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className={`w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all ${!reducedMotion ? 'hover:scale-105' : ''}`}
+                className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
               >
                 <Upload className="mr-2 h-5 w-5" />
                 {isUploading ? 'Uploading...' : 'Upload File'}
@@ -226,7 +224,7 @@ export default function Home() {
               <Button
                 onClick={handleSubmit}
                 disabled={!content.trim()}
-                className={`w-full text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-xl shadow-lg transition-all ${!reducedMotion ? 'hover:scale-105' : ''}`}
+                className="w-full text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
               >
                 <FileText className="mr-2 h-5 w-5" />
                 Start Learning
@@ -256,7 +254,7 @@ export default function Home() {
                   <div
                     key={idx}
                     onClick={handleClick}
-                    className={`glass-card p-6 md:p-8 rounded-2xl transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10 ${!reducedMotion ? 'hover:scale-105' : ''}`}
+                    className="glass-card p-6 md:p-8 rounded-2xl hover:scale-105 transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10"
                   >
                     <div className="text-4xl md:text-5xl mb-4">{feature.icon}</div>
                     <h3 className="text-xl md:text-2xl font-bold mb-3">{feature.title}</h3>
