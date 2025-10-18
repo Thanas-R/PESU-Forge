@@ -7,8 +7,7 @@ import {
   MessageSquare,
   Settings,
   Sun,
-  Moon,
-  Linkedin
+  Moon
 } from 'lucide-react';
 import { Dock, DockIcon, DockItem, DockLabel } from '@/components/Dock';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -101,24 +100,6 @@ export function AppDock() {
             <div className="flex items-center justify-center w-full h-full">
               <AccessibilitySettings />
             </div>
-          </DockIcon>
-        </DockItem>
-
-        {/* LinkedIn Link */}
-        <DockItem
-          className='aspect-square rounded-2xl bg-background/60 border border-border/40 hover:bg-background/80 hover:border-border/60 transition-none cursor-pointer'
-        >
-          <DockLabel>LinkedIn</DockLabel>
-          <DockIcon>
-            <a
-              href="https://www.linkedin.com/in/thanasr/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-full h-full"
-              aria-label="Visit LinkedIn profile"
-            >
-              <Linkedin className='w-5 h-5 text-foreground' />
-            </a>
           </DockIcon>
         </DockItem>
       </Dock>
