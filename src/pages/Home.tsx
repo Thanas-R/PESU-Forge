@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, FileText, MessageSquare, X, Github } from 'lucide-react';
+import { Upload, FileText, MessageSquare, X, Github, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';
@@ -306,6 +306,15 @@ export default function Home() {
                       aria-label="Thanas R's GitHub"
                     >
                       <Github className="h-4 w-4" />
+                    </a>
+                    <a 
+                      href="https://www.linkedin.com/in/thanasr/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:text-primary transition-colors"
+                      aria-label="Thanas R's LinkedIn"
+                    >
+                      <Linkedin className="h-4 w-4" />
                     </a>
                   </div>
                   <div>
