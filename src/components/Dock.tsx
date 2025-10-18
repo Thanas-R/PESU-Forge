@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import { cn } from '@/lib/utils';
+import { useAccessibility } from '@/hooks/useAccessibility';
 
 const DEFAULT_MAGNIFICATION = 80;
 const DEFAULT_DISTANCE = 150;
@@ -93,9 +94,15 @@ function DockItem({ children, className }: DockItemProps) {
   const ref = useRef<HTMLButtonElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const { distance, magnification, mouseX } = useDock();
+  const { reducedMotion } = useAccessibility();
   const [width, setWidth] = useState(40);
 
   useEffect(() => {
+    if (reducedMotion) {
+      setWidth(40);
+      return;
+    }
+    
     const domRect = ref.current?.getBoundingClientRect();
     if (!domRect) return;
 
@@ -104,7 +111,7 @@ function DockItem({ children, className }: DockItemProps) {
     const newWidth = 40 + (magnification - 40) * distanceRatio;
     
     setWidth(newWidth);
-  }, [mouseX, distance, magnification]);
+  }, [mouseX, distance, magnification, reducedMotion]);
 
   return (
     <button
@@ -130,13 +137,15 @@ function DockItem({ children, className }: DockItemProps) {
 function DockLabel({ children, className, ...rest }: DockLabelProps) {
   const restProps = rest as Record<string, unknown>;
   const isHovered = restProps['isHovered'] as boolean;
+  const { reducedMotion } = useAccessibility();
 
   return (
     <>
       {isHovered && (
         <div
           className={cn(
-            'absolute -top-10 left-1/2 -translate-x-1/2 w-fit whitespace-pre rounded-lg glass-card px-3 py-1.5 text-xs text-foreground pixel-font animate-in fade-in slide-in-from-bottom-2 duration-200 shadow-lg',
+            'absolute -top-10 left-1/2 -translate-x-1/2 w-fit whitespace-pre rounded-lg glass-card px-3 py-1.5 text-xs text-foreground pixel-font shadow-lg',
+            !reducedMotion && 'animate-in fade-in slide-in-from-bottom-2 duration-200',
             className
           )}
           role='tooltip'
