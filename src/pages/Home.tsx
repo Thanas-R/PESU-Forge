@@ -321,10 +321,10 @@ export default function Home() {
 
 
 
-                  <div>
-                    <span className="text-white font-bold text-base md:text-lg">T N Pranav</span>
-                    <span className="text-muted-foreground text-sm md:text-base ml-2">CSE • 2025-29</span>
-                  </div>
+                  
+
+
+
                 </div>
                 <p className="mt-8 text-muted-foreground leading-relaxed text-sm md:text-base">
                   Created to help PESU students prepare quickly with their short notes and study materials.
