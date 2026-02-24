@@ -289,9 +289,9 @@ export default function Home() {
         <section ref={aboutRef} id="about" className="py-12 md:py-20 px-4">
           <div className="container mx-auto">
             <div className="glass-card p-8 md:p-12 rounded-2xl shadow-2xl max-w-5xl mx-auto backdrop-blur-xl border border-white/10">
-              <h2 className="text-3xl md:text-5xl font-bold mb-8 text-center">ABOUT US</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-8 text-center">ABOUT Me</h2>
               <div className="glass-card p-6 md:p-8 rounded-xl bg-card/40 border border-white/5">
-              <h3 className="text-2xl md:text-3xl mb-6 text-primary font-bold">PROUD PESU STUDENTS</h3>
+              <h3 className="text-2xl md:text-3xl mb-6 text-primary font-bold">PROUD PESU STUDENT</h3>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div>
@@ -317,10 +317,10 @@ export default function Home() {
                       <Linkedin className="h-4 w-4" />
                     </a>
                   </div>
-                  <div>
-                    <span className="text-white font-bold text-base md:text-lg">Tanay S</span>
-                    <span className="text-muted-foreground text-sm md:text-base ml-2">CSE • 2025-29</span>
-                  </div>
+                  
+
+
+
                   <div>
                     <span className="text-white font-bold text-base md:text-lg">T N Pranav</span>
                     <span className="text-muted-foreground text-sm md:text-base ml-2">CSE • 2025-29</span>
