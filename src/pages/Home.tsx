@@ -9,7 +9,7 @@ import pixelBackground from '@/assets/pixel-background.png';
 export default function Home() {
   const [content, setContent] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<Array<{name: string;preview: string;}>>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; preview: string }>>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
   const featuresRef = useRef<HTMLElement>(null);
@@ -22,7 +22,7 @@ export default function Home() {
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
-    const newFiles: Array<{name: string;preview: string;}> = [];
+    const newFiles: Array<{ name: string; preview: string }> = [];
     let combinedContent = content;
 
     try {
@@ -43,14 +43,14 @@ export default function Home() {
           toast({
             title: 'Legacy .doc not supported',
             description: `${file.name}: Please convert to .docx or .txt and try again.`,
-            variant: 'destructive'
+            variant: 'destructive',
           });
           continue;
         } else {
           toast({
             title: 'Unsupported file type',
             description: `${file.name}: Use a .txt or .docx file.`,
-            variant: 'destructive'
+            variant: 'destructive',
           });
           continue;
         }
@@ -59,7 +59,7 @@ export default function Home() {
           combinedContent += (combinedContent ? '\n\n' : '') + extractedText;
           newFiles.push({
             name: file.name,
-            preview: extractedText.slice(0, 200) + (extractedText.length > 200 ? '...' : '')
+            preview: extractedText.slice(0, 200) + (extractedText.length > 200 ? '...' : ''),
           });
         }
       }
@@ -69,14 +69,14 @@ export default function Home() {
         setUploadedFiles([...uploadedFiles, ...newFiles]);
         toast({
           title: `${newFiles.length} file(s) uploaded successfully!`,
-          description: 'Content has been added to the input below.'
+          description: 'Content has been added to the input below.',
         });
       }
     } catch (error) {
       toast({
         title: 'Upload failed',
         description: 'Please try again with a different file.',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsUploading(false);
@@ -98,7 +98,7 @@ export default function Home() {
       toast({
         title: 'No content provided',
         description: 'Please paste or upload content first.',
-        variant: 'destructive'
+        variant: 'destructive',
       });
       return;
     }
@@ -107,7 +107,7 @@ export default function Home() {
       toast({
         title: 'Content too short',
         description: 'Please provide at least 50 characters for AI to generate meaningful learning materials.',
-        variant: 'destructive'
+        variant: 'destructive',
       });
       return;
     }
@@ -115,7 +115,7 @@ export default function Home() {
     localStorage.setItem('learning-content', content);
     toast({
       title: 'Content saved!',
-      description: 'Choose a learning mode from the dock below.'
+      description: 'Choose a learning mode from the dock below.',
     });
   };
 
@@ -126,34 +126,34 @@ export default function Home() {
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${pixelBackground})`,
-          filter: 'brightness(0.85) saturate(1.2)'
-        }} />
-
+          filter: 'brightness(0.85) saturate(1.2)',
+        }}
+      />
       
       {/* Gradient Overlay - darker tint in light mode, transparent in dark mode */}
       <div className="fixed inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background/70 dark:from-background/70 dark:via-background/80 dark:to-background/90" />
       
       <div className="relative z-10 pb-24">
         {/* Top Navigation */}
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <header className="flex justify-between items-center p-4 md:p-6">
+          <div className="text-xl md:text-2xl font-bold glass-card px-4 md:px-6 py-2 md:py-3 rounded-xl shadow-lg">
+            PESU
+          </div>
+          <nav className="hidden md:flex gap-6 text-sm font-medium">
+            <button
+              onClick={() => scrollToSection(featuresRef)}
+              className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all"
+            >
+              FEATURES
+            </button>
+            <button
+              onClick={() => scrollToSection(aboutRef)}
+              className="glass-card px-4 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 transition-all"
+            >
+              ABOUT
+            </button>
+          </nav>
+        </header>
 
         {/* Hero Section */}
         <section className="container mx-auto px-4 pt-12 md:pt-20 pb-16 md:pb-24 text-center">
@@ -173,40 +173,40 @@ export default function Home() {
                 accept=".txt,.docx"
                 onChange={handleFileUpload}
                 className="hidden"
-                multiple />
-
+                multiple
+              />
               <Button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all hover:scale-105">
-
+                className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
+              >
                 <Upload className="mr-2 h-5 w-5" />
                 {isUploading ? 'Uploading...' : 'Upload File'}
               </Button>
 
-              {uploadedFiles.length > 0 &&
-              <div className="space-y-2">
+              {uploadedFiles.length > 0 && (
+                <div className="space-y-2">
                   <p className="text-sm font-medium">Uploaded Files:</p>
-                  {uploadedFiles.map((file, index) =>
-                <div key={index} className="glass-card p-3 rounded-lg border border-white/10 space-y-2">
+                  {uploadedFiles.map((file, index) => (
+                    <div key={index} className="glass-card p-3 rounded-lg border border-white/10 space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium flex items-center gap-2">
                           <FileText className="h-4 w-4" />
                           {file.name}
                         </span>
                         <button
-                      onClick={() => removeFile(index)}
-                      className="text-muted-foreground hover:text-destructive transition-colors"
-                      aria-label="Remove file">
-
+                          onClick={() => removeFile(index)}
+                          className="text-muted-foreground hover:text-destructive transition-colors"
+                          aria-label="Remove file"
+                        >
                           <X className="h-4 w-4" />
                         </button>
                       </div>
                       <p className="text-xs text-muted-foreground">{file.preview}</p>
                     </div>
-                )}
+                  ))}
                 </div>
-              }
+              )}
 
               <div className="text-muted-foreground text-sm">Or paste your content here...</div>
 
@@ -218,14 +218,14 @@ export default function Home() {
                   setContent(newContent);
                   localStorage.setItem('learning-content', newContent);
                 }}
-                className="min-h-[150px] md:min-h-[200px] resize-none glass-input text-sm md:text-base p-4 rounded-xl border-2 border-white/10 focus:border-primary/50 transition-all bg-background/40" />
-
+                className="min-h-[150px] md:min-h-[200px] resize-none glass-input text-sm md:text-base p-4 rounded-xl border-2 border-white/10 focus:border-primary/50 transition-all bg-background/40"
+              />
 
               <Button
                 onClick={handleSubmit}
                 disabled={!content.trim()}
-                className="w-full text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-xl shadow-lg transition-all hover:scale-105">
-
+                className="w-full text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
+              >
                 <FileText className="mr-2 h-5 w-5" />
                 Start Learning
               </Button>
@@ -241,11 +241,11 @@ export default function Home() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
               {[
-              { title: 'NOTES & FLASH CARDS', desc: 'Quick revision with smart cards and AI-organized notes', icon: '📝', route: '/flashcards' },
-              { title: 'QUIZ GAME', desc: 'Test your knowledge with adaptive difficulty', icon: '🎯', route: '/quiz' },
-              { title: 'MEMORY MATCH', desc: 'Match concepts in a fun game', icon: '🎮', route: '/memory' },
-              { title: 'THOUGHTSCAPE', desc: 'Visual mind maps of your content', icon: '🌐', route: '/thoughtscape' }].
-              map((feature, idx) => {
+                { title: 'NOTES & FLASH CARDS', desc: 'Quick revision with smart cards and AI-organized notes', icon: '📝', route: '/flashcards' },
+                { title: 'QUIZ GAME', desc: 'Test your knowledge with adaptive difficulty', icon: '🎯', route: '/quiz' },
+                { title: 'MEMORY MATCH', desc: 'Match concepts in a fun game', icon: '🎮', route: '/memory' },
+                { title: 'THOUGHTSCAPE', desc: 'Visual mind maps of your content', icon: '🌐', route: '/thoughtscape' },
+              ].map((feature, idx) => {
                 const handleClick = () => {
                   navigate(feature.route);
                 };
@@ -254,13 +254,13 @@ export default function Home() {
                   <div
                     key={idx}
                     onClick={handleClick}
-                    className="glass-card p-6 md:p-8 rounded-2xl hover:scale-105 transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10">
-
+                    className="glass-card p-6 md:p-8 rounded-2xl hover:scale-105 transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10"
+                  >
                     <div className="text-4xl md:text-5xl mb-4">{feature.icon}</div>
                     <h3 className="text-xl md:text-2xl font-bold mb-3">{feature.title}</h3>
                     <p className="text-sm md:text-base text-muted-foreground">{feature.desc}</p>
-                  </div>);
-
+                  </div>
+                );
               })}
             </div>
           </div>
@@ -289,38 +289,38 @@ export default function Home() {
         <section ref={aboutRef} id="about" className="py-12 md:py-20 px-4">
           <div className="container mx-auto">
             <div className="glass-card p-8 md:p-12 rounded-2xl shadow-2xl max-w-5xl mx-auto backdrop-blur-xl border border-white/10">
-              <h2 className="text-3xl md:text-5xl font-bold mb-8 text-center">ABOUT Me</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-8 text-center">ABOUT US</h2>
               <div className="glass-card p-6 md:p-8 rounded-xl bg-card/40 border border-white/5">
-              <h3 className="text-2xl md:text-3xl mb-6 text-primary font-bold">PROUD PESU STUDENT</h3>
+              <h3 className="text-2xl md:text-3xl mb-6 text-primary font-bold">PROUD PESU STUDENTS</h3>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div>
                       <span className="text-white font-bold text-base md:text-lg">Thanas R</span>
                       <span className="text-muted-foreground text-sm md:text-base ml-2">AIML • 2025-29</span>
                     </div>
-                    <a
-                      href="https://github.com/Thanas-R?tab=repositories"
-                      target="_blank"
+                    <a 
+                      href="https://github.com/Thanas-R?tab=repositories" 
+                      target="_blank" 
                       rel="noopener noreferrer"
                       className="hover:text-primary transition-colors"
-                      aria-label="Thanas R's GitHub">
-
+                      aria-label="Thanas R's GitHub"
+                    >
                       <Github className="h-4 w-4" />
                     </a>
-                    <a
-                      href="https://www.linkedin.com/in/thanasr/"
-                      target="_blank"
+                    <a 
+                      href="https://www.linkedin.com/in/thanasr/" 
+                      target="_blank" 
                       rel="noopener noreferrer"
                       className="hover:text-primary transition-colors"
-                      aria-label="Thanas R's LinkedIn">
-
+                      aria-label="Thanas R's LinkedIn"
+                    >
                       <Linkedin className="h-4 w-4" />
                     </a>
                   </div>
-                  
-
-
-
+                  <div>
+                    <span className="text-white font-bold text-base md:text-lg">Tanay S</span>
+                    <span className="text-muted-foreground text-sm md:text-base ml-2">CSE • 2025-29</span>
+                  </div>
                   <div>
                     <span className="text-white font-bold text-base md:text-lg">T N Pranav</span>
                     <span className="text-muted-foreground text-sm md:text-base ml-2">CSE • 2025-29</span>
@@ -335,6 +335,6 @@ export default function Home() {
           </div>
         </section>
       </div>
-    </div>);
-
+    </div>
+  );
 }
