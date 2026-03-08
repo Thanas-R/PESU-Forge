@@ -137,7 +137,7 @@ export default function Home() {
         {/* Top Navigation */}
         <header className="flex justify-between items-center p-4 md:p-6">
           <div className="text-xl md:text-2xl font-bold glass-card px-4 md:px-6 py-2 md:py-3 rounded-xl shadow-lg">
-            ​Forge
+            Forge
           </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium">
             <button
