@@ -8,10 +8,10 @@ The idea behind PESU Forge was to make studying more interactive by turning stat
 
 ## Features
 
-- Flashcards — AI-generated question and answer cards with flip animations  
-- Quiz — Multiple-choice quizzes generated from notes with explanations  
-- Memory Match — Concept matching card game with scoring and timer  
-- Thoughtscape — Visual mind maps generated from study material  
+- Flashcards - AI-generated question and answer cards with flip animations  
+- Quiz - Multiple-choice quizzes generated from notes with explanations  
+- Memory Match - Concept matching card game with scoring and timer  
+- Thoughtscape - Visual mind maps generated from study material  
 
 ## Tech Stack
 
