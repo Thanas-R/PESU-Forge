@@ -319,10 +319,10 @@ export default function Home() {
 
 
                 </div>
-                <p className="mt-8 text-muted-foreground leading-relaxed text-sm md:text-base">
-                  Created to help PESU students prepare quickly with their short notes and study materials.
-                  Our AI-powered platform transforms your content into interactive learning experiences.
-                </p>
+                
+
+
+                
               </div>
             </div>
           </div>
