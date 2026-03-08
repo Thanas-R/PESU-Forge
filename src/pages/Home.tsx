@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, FileText, MessageSquare, X, Github, Linkedin } from 'lucide-react';
+import { Upload, FileText, MessageSquare, X, Github, Linkedin, StickyNote, Target, Gamepad2, Network } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';
@@ -241,27 +241,20 @@ export default function Home() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
               {[
-              { title: 'NOTES & FLASH CARDS', desc: 'Quick revision with smart cards and AI-organized notes', icon: '📝', route: '/flashcards' },
-              { title: 'QUIZ GAME', desc: 'Test your knowledge with adaptive difficulty', icon: '🎯', route: '/quiz' },
-              { title: 'MEMORY MATCH', desc: 'Match concepts in a fun game', icon: '🎮', route: '/memory' },
-              { title: 'THOUGHTSCAPE', desc: 'Visual mind maps of your content', icon: '🌐', route: '/thoughtscape' }].
-              map((feature, idx) => {
-                const handleClick = () => {
-                  navigate(feature.route);
-                };
-
-                return (
+              { title: 'NOTES & FLASH CARDS', desc: 'Quick revision with smart cards and AI-organized notes', Icon: StickyNote, route: '/flashcards' },
+              { title: 'QUIZ GAME', desc: 'Test your knowledge with adaptive difficulty', Icon: Target, route: '/quiz' },
+              { title: 'MEMORY MATCH', desc: 'Match concepts in a fun game', Icon: Gamepad2, route: '/memory' },
+              { title: 'THOUGHTSCAPE', desc: 'Visual mind maps of your content', Icon: Network, route: '/thoughtscape' }].
+              map((feature, idx) => (
                   <div
                     key={idx}
-                    onClick={handleClick}
+                    onClick={() => navigate(feature.route)}
                     className="glass-card p-6 md:p-8 rounded-2xl hover:scale-105 transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10">
-
-                    <div className="text-4xl md:text-5xl mb-4">{feature.icon}</div>
+                    <feature.Icon className="h-10 w-10 md:h-12 md:w-12 mb-4 text-primary" />
                     <h3 className="text-xl md:text-2xl font-bold mb-3">{feature.title}</h3>
                     <p className="text-sm md:text-base text-muted-foreground">{feature.desc}</p>
-                  </div>);
-
-              })}
+                  </div>
+              ))}
             </div>
           </div>
         </section>
