@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, FileText, MessageSquare, X, Github, Linkedin } from 'lucide-react';
+import { Upload, FileText, MessageSquare, X, Github, Linkedin, StickyNote, Target, Gamepad2, Network } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';

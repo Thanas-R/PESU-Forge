@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, RotateCcw, Zap } from 'lucide-react';
+import { ChevronLeft, ChevronRight, RotateCcw, Sparkles, BookOpen, Lightbulb, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { TextShimmer } from '@/components/ui/text-shimmer';
+import { Progress } from '@/components/ui/progress';
+import { supabase } from '@/integrations/supabase/client';
 
 interface FlashCard {
   question: string;
@@ -35,28 +37,31 @@ export default function FlashCards() {
       return;
     }
 
-    // Simulate AI generation - in production this would call your edge function
-    setTimeout(() => {
-      const mockMaterial: StudyMaterial = {
-        summary: content.slice(0, 200) + '...',
-        keyPoints: [
-          content.split('.')[0] || 'Key concept from your notes',
-          content.split('.')[1] || 'Important detail to remember',
-          content.split('.')[2] || 'Critical information for learning',
-        ].filter(p => p.trim()),
-        flashcards: [
-          { question: 'What is the main concept?', answer: content.slice(0, 100) },
-          { question: 'Key takeaway?', answer: content.slice(100, 200) },
-          { question: 'Important detail?', answer: content.slice(200, 300) },
-        ],
-      };
-      setStudyMaterial(mockMaterial);
-      setIsLoading(false);
-      toast({
-        title: 'Study materials generated!',
-        description: `Created summary, ${mockMaterial.keyPoints.length} key points, and ${mockMaterial.flashcards.length} flashcards.`,
-      });
-    }, 1500);
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('generate-learning', {
+          body: { content, type: 'flashcards' },
+        });
+        if (error) throw error;
+
+        const material: StudyMaterial = {
+          summary: data?.summary || 'No summary available.',
+          keyPoints: data?.keyPoints || [],
+          flashcards: data?.flashcards || [],
+        };
+
+        if (material.flashcards.length === 0) {
+          toast({ title: 'No flashcards generated', description: 'Try with more detailed content.', variant: 'destructive' });
+        }
+
+        setStudyMaterial(material);
+      } catch (e) {
+        console.error(e);
+        toast({ title: 'Failed to generate study materials', variant: 'destructive' });
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, [toast]);
 
   const handleNext = () => {
@@ -75,24 +80,26 @@ export default function FlashCards() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="p-8 glass-card">
-          <div className="flex items-center gap-2">
-            <Zap className="h-6 w-6 text-primary" />
-            <TextShimmer duration={1} className="text-2xl">Generating study materials...</TextShimmer>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30 p-4">
+        <Card className="p-8 glass-card border border-border/50">
+          <div className="flex items-center gap-3">
+            <Sparkles className="h-6 w-6 text-primary animate-pulse" />
+            <TextShimmer duration={1} className="text-2xl font-semibold">Generating study materials...</TextShimmer>
           </div>
         </Card>
       </div>
     );
   }
 
-  if (!studyMaterial) {
+  if (!studyMaterial || studyMaterial.flashcards.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center glass-card p-4">
-        <Card className="p-8 glass-card text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30 p-4">
+        <Card className="p-8 glass-card text-center border border-border/50">
+          <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-2xl mb-4 font-bold">No Content Available</h2>
           <p className="text-muted-foreground mb-4">Please upload content from the home page first (minimum 50 characters).</p>
           <Button onClick={() => window.location.href = '/'}>
+            <Home className="mr-2 h-4 w-4" />
             Go to Home
           </Button>
         </Card>
@@ -101,87 +108,100 @@ export default function FlashCards() {
   }
 
   const currentCard = studyMaterial.flashcards[currentIndex];
+  const progress = ((currentIndex + 1) / studyMaterial.flashcards.length) * 100;
 
   return (
-    <div className="min-h-screen glass-card p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 p-4 md:p-8">
       <div className="container mx-auto max-w-5xl space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Generated Study Materials</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Study Materials</h1>
+          <p className="text-muted-foreground">Generated from your content</p>
         </div>
 
-        {/* Summary Section */}
-        <Card className="glass-card p-6 md:p-8 border border-white/10">
+        {/* Summary */}
+        <Card className="glass-card p-6 md:p-8 border border-border/50">
           <div className="flex items-center gap-2 mb-4">
-            <Zap className="h-6 w-6 text-primary" />
-            <h2 className="text-2xl font-bold">Summary</h2>
+            <Sparkles className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-bold">Summary</h2>
           </div>
           <p className="text-muted-foreground leading-relaxed">{studyMaterial.summary}</p>
         </Card>
 
-        {/* Key Points Section */}
-        <Card className="glass-card p-6 md:p-8 border border-white/10">
-          <h2 className="text-2xl font-bold mb-4">Key Points</h2>
-          <ul className="space-y-3">
-            {studyMaterial.keyPoints.map((point, idx) => (
-              <li key={idx} className="flex items-start gap-3">
-                <span className="text-primary font-bold mt-1">•</span>
-                <span className="text-muted-foreground">{point}</span>
-              </li>
-            ))}
-          </ul>
-        </Card>
+        {/* Key Points */}
+        {studyMaterial.keyPoints.length > 0 && (
+          <Card className="glass-card p-6 md:p-8 border border-border/50">
+            <div className="flex items-center gap-2 mb-4">
+              <Lightbulb className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-bold">Key Points</h2>
+            </div>
+            <ul className="space-y-3">
+              {studyMaterial.keyPoints.map((point, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <span className="text-primary font-bold mt-0.5 text-sm">{idx + 1}.</span>
+                  <span className="text-muted-foreground text-sm">{point}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
 
-        {/* Flashcards Section */}
+        {/* Flashcards */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-center">
-            Flashcards ({studyMaterial.flashcards.length})
-          </h2>
-          
-          <div className="text-center text-sm text-muted-foreground mb-4">
-            Card {currentIndex + 1} of {studyMaterial.flashcards.length}
+          <div className="flex items-center justify-center gap-2">
+            <BookOpen className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-bold">Flashcards ({studyMaterial.flashcards.length})</h2>
           </div>
 
-          <Card
-            className="glass-card min-h-[250px] p-8 border border-white/10 flex items-center justify-center cursor-pointer"
-            onClick={() => setIsFlipped(!isFlipped)}
-          >
-            <div className="text-center">
-              <div className="text-sm text-primary mb-2 font-semibold uppercase">
-                {isFlipped ? 'ANSWER' : 'QUESTION'}
-              </div>
-              <p className="text-xl md:text-2xl font-bold mb-4 whitespace-pre-wrap">
-                {isFlipped ? currentCard.answer : currentCard.question}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {isFlipped ? 'Click to see question' : 'Click to reveal answer'}
-              </p>
-            </div>
-          </Card>
+          <div className="text-center text-sm text-muted-foreground">
+            Card {currentIndex + 1} of {studyMaterial.flashcards.length}
+          </div>
+          <Progress value={progress} className="max-w-md mx-auto" />
 
-          <div className="flex justify-between items-center pt-4">
-            <Button
-              onClick={handlePrevious}
-              disabled={currentIndex === 0}
-              size="lg"
+          {/* 3D Flip Card */}
+          <div
+            className="perspective-1000 max-w-2xl mx-auto cursor-pointer"
+            onClick={() => setIsFlipped(!isFlipped)}
+            style={{ perspective: '1000px' }}
+          >
+            <div
+              className="relative w-full min-h-[250px] transition-transform duration-500"
+              style={{
+                transformStyle: 'preserve-3d',
+                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
             >
+              {/* Front */}
+              <Card
+                className="absolute inset-0 glass-card p-8 border border-border/50 flex flex-col items-center justify-center"
+                style={{ backfaceVisibility: 'hidden' }}
+              >
+                <div className="text-xs text-primary font-semibold uppercase tracking-wider mb-3">Question</div>
+                <p className="text-lg md:text-xl font-medium text-center whitespace-pre-wrap">{currentCard.question}</p>
+                <p className="text-xs text-muted-foreground mt-4">Click to reveal answer</p>
+              </Card>
+
+              {/* Back */}
+              <Card
+                className="absolute inset-0 glass-card p-8 border border-primary/30 flex flex-col items-center justify-center bg-primary/5"
+                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+              >
+                <div className="text-xs text-primary font-semibold uppercase tracking-wider mb-3">Answer</div>
+                <p className="text-lg md:text-xl font-medium text-center whitespace-pre-wrap">{currentCard.answer}</p>
+                <p className="text-xs text-muted-foreground mt-4">Click to see question</p>
+              </Card>
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center pt-4 max-w-2xl mx-auto">
+            <Button onClick={handlePrevious} disabled={currentIndex === 0} size="lg" variant="outline">
               <ChevronLeft className="mr-2 h-5 w-5" />
               Previous
             </Button>
-
-            <Button
-              onClick={() => setIsFlipped(!isFlipped)}
-              variant="outline"
-              size="lg"
-            >
+            <Button onClick={() => setIsFlipped(!isFlipped)} variant="ghost" size="lg">
               <RotateCcw className="mr-2 h-5 w-5" />
               Flip
             </Button>
-
-            <Button
-              onClick={handleNext}
-              disabled={currentIndex === studyMaterial.flashcards.length - 1}
-              size="lg"
-            >
+            <Button onClick={handleNext} disabled={currentIndex === studyMaterial.flashcards.length - 1} size="lg" variant="outline">
               Next
               <ChevronRight className="ml-2 h-5 w-5" />
             </Button>

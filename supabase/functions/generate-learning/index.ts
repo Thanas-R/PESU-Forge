@@ -27,15 +27,23 @@ serve(async (req) => {
       "You generate study materials from ONLY the provided user content. Output concise, accurate results. Do not invent facts.";
 
     const user = `You MUST use ONLY the user content between the markers. Do NOT add external facts.
-Return STRICT JSON with this structure (omit fields that are not requested by 'type'):
+Return STRICT JSON with this structure (include ALL fields regardless of type):
 {
-  "questions": [
+  "summary": string,          // 2-4 sentence summary of the content
+  "keyPoints": string[],      // 5-8 key takeaways from the content
+  "flashcards": [             // Q&A pairs for flashcard study
+    {"question": string, "answer": string}
+  ],
+  "questions": [              // multiple-choice quiz questions
     {"question": string, "options": string[], "correctIndex": number, "explanation": string}
   ],
-  "concepts": string[]  // 8-12 short key terms from the content
+  "concepts": string[]        // 8-12 short key terms from the content
 }
 
 Rules:
+- summary should be concise and capture the main idea.
+- keyPoints should be distinct, actionable takeaways.
+- Create at least 8 flashcards with clear question-answer pairs.
 - Create at least ${count} multiple-choice questions with 4 plausible options each.
 - Explanations must cite phrases from the content where possible.
 - concepts should be single words or very short phrases from the content.
@@ -83,7 +91,6 @@ ${content}
     const data = await response.json();
     const text = data.choices?.[0]?.message?.content ?? "";
 
-    // Try to parse JSON; if model wrapped in prose, extract JSON block
     let json: any;
     try {
       json = JSON.parse(text);
@@ -99,12 +106,18 @@ ${content}
       });
     }
 
-    // Basic validation / trimming
+    // Validation / trimming
     if (Array.isArray(json.questions)) {
       json.questions = json.questions.slice(0, Math.max(count, 5));
     }
     if (Array.isArray(json.concepts)) {
       json.concepts = json.concepts.slice(0, 12).filter((s: unknown) => typeof s === "string" && s.trim().length > 0);
+    }
+    if (Array.isArray(json.flashcards)) {
+      json.flashcards = json.flashcards.slice(0, 15);
+    }
+    if (Array.isArray(json.keyPoints)) {
+      json.keyPoints = json.keyPoints.slice(0, 8);
     }
 
     return new Response(JSON.stringify(json), {
