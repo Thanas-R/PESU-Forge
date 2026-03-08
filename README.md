@@ -1,73 +1,40 @@
-# Welcome to your Lovable project
+# PESU Forge
 
-## Project info
+PESU Forge is an AI-powered study tool that transforms notes into interactive learning experiences such as flashcards, quizzes, memory games, and visual mind maps.
 
-**URL**: https://lovable.dev/projects/32f759b2-a918-4189-a800-7c48b19305ad
+This was my first ever project and the one that introduced me to building with AI. Working on this project exposed me to how modern AI systems can be integrated into applications, which eventually pushed me to explore and build more projects afterwards. It became the starting point of my development journey and helped me understand how to connect frontend interfaces with AI-powered backends.
 
-## How can I edit this code?
+The idea behind PESU Forge was to make studying more interactive by turning static notes into dynamic learning formats that help with recall, understanding, and engagement.
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- Flashcards — AI-generated question and answer cards with flip animations  
+- Quiz — Multiple-choice quizzes generated from notes with explanations  
+- Memory Match — Concept matching card game with scoring and timer  
+- Thoughtscape — Visual mind maps generated from study material  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/32f759b2-a918-4189-a800-7c48b19305ad) and start prompting.
+## Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+**Frontend**
+- React  
+- TypeScript  
+- Vite  
 
-**Use your preferred IDE**
+**Styling**
+- Tailwind CSS  
+- shadcn/ui  
+- Framer Motion  
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+**AI**
+- Google Gemini 2.5 Flash  
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-Follow these steps:
+**State Management**
+- Zustand  
+- React Query  
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## How It Works
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/32f759b2-a918-4189-a800-7c48b19305ad) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. Paste notes or upload `.txt` or `.docx` files  
+2. AI processes the content and generates study materials  
+3. Choose a learning mode such as flashcards, quizzes, or concept maps
