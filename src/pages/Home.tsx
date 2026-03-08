@@ -245,16 +245,16 @@ export default function Home() {
               { title: 'QUIZ GAME', desc: 'Test your knowledge with adaptive difficulty', Icon: Target, route: '/quiz' },
               { title: 'MEMORY MATCH', desc: 'Match concepts in a fun game', Icon: Gamepad2, route: '/memory' },
               { title: 'THOUGHTSCAPE', desc: 'Visual mind maps of your content', Icon: Network, route: '/thoughtscape' }].
-              map((feature, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => navigate(feature.route)}
-                    className="glass-card p-6 md:p-8 rounded-2xl hover:scale-105 transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10">
+              map((feature, idx) =>
+              <div
+                key={idx}
+                onClick={() => navigate(feature.route)}
+                className="glass-card p-6 md:p-8 rounded-2xl hover:scale-105 transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10">
                     <feature.Icon className="h-10 w-10 md:h-12 md:w-12 mb-4 text-primary" />
                     <h3 className="text-xl md:text-2xl font-bold mb-3">{feature.title}</h3>
                     <p className="text-sm md:text-base text-muted-foreground">{feature.desc}</p>
                   </div>
-              ))}
+              )}
             </div>
           </div>
         </section>
@@ -262,19 +262,19 @@ export default function Home() {
         {/* askPESU Section */}
         <section className="py-12 md:py-20 px-4">
           <div className="container mx-auto max-w-4xl">
-            <div className="glass-card p-8 md:p-12 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/10">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center text-white drop-shadow-lg flex items-center justify-center gap-3">
-                <MessageSquare className="h-8 w-8 md:h-10 md:w-10" />
-                askPESU
-              </h2>
-              <p className="text-center text-muted-foreground mb-8 text-sm md:text-base">
-                Coming soon with all the PESU Lores and more!
-              </p>
-              <div className="glass-card p-6 md:p-8 rounded-xl bg-card/40 border border-white/5 min-h-[200px] md:min-h-[250px] flex flex-col items-center justify-center text-center">
-                <p className="text-base md:text-lg text-muted-foreground mb-2">Start a conversation...</p>
-                <p className="text-xs md:text-sm text-muted-foreground/70">Feature will be implemented soon</p>
-              </div>
-            </div>
+            
+
+
+
+
+
+
+
+
+
+
+
+            
           </div>
         </section>
 
