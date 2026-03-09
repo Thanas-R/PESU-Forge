@@ -17,7 +17,7 @@ async function extractPdfText(file: File): Promise<string> {
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
     const tc = await page.getTextContent();
-    pages.push(tc.items.map((item: any) => ('str' in item ? item.str : '')).join(' '));
+    pages.push(tc.items.map((item: any) => 'str' in item ? item.str : '').join(' '));
   }
   return pages.join('\n\n');
 }
@@ -25,7 +25,7 @@ async function extractPdfText(file: File): Promise<string> {
 export default function Home() {
   const [content, setContent] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; preview: string }>>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{name: string;preview: string;}>>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
   const featuresRef = useRef<HTMLElement>(null);
@@ -37,7 +37,7 @@ export default function Home() {
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
-    const newFiles: Array<{ name: string; preview: string }> = [];
+    const newFiles: Array<{name: string;preview: string;}> = [];
     let combinedContent = content;
 
     try {
@@ -67,7 +67,7 @@ export default function Home() {
           combinedContent += (combinedContent ? '\n\n' : '') + extractedText;
           newFiles.push({
             name: file.name,
-            preview: extractedText.slice(0, 200) + (extractedText.length > 200 ? '...' : ''),
+            preview: extractedText.slice(0, 200) + (extractedText.length > 200 ? '...' : '')
           });
         }
       }
@@ -88,7 +88,7 @@ export default function Home() {
   const removeFile = (index: number) => setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
 
   const scrollToSection = (ref: React.RefObject<HTMLElement>) =>
-    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   const handleSubmit = () => {
     if (!content.trim()) {
@@ -104,18 +104,18 @@ export default function Home() {
   };
 
   const features = [
-    { title: 'NOTES & FLASH CARDS', desc: 'Quick revision with smart cards and AI-organized notes', Icon: StickyNote, route: '/flashcards' },
-    { title: 'QUIZ GAME', desc: 'Test your knowledge with adaptive difficulty', Icon: Target, route: '/quiz' },
-    { title: 'MEMORY MATCH', desc: 'Match concepts in a fun game', Icon: Gamepad2, route: '/memory' },
-    { title: 'THOUGHTSCAPE', desc: 'Visual mind maps of your content', Icon: Network, route: '/thoughtscape' },
-  ];
+  { title: 'NOTES & FLASH CARDS', desc: 'Quick revision with smart cards and AI-organized notes', Icon: StickyNote, route: '/flashcards' },
+  { title: 'QUIZ GAME', desc: 'Test your knowledge with adaptive difficulty', Icon: Target, route: '/quiz' },
+  { title: 'MEMORY MATCH', desc: 'Match concepts in a fun game', Icon: Gamepad2, route: '/memory' },
+  { title: 'THOUGHTSCAPE', desc: 'Visual mind maps of your content', Icon: Network, route: '/thoughtscape' }];
+
 
   return (
     <div className="min-h-screen relative">
       <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${pixelBackground})`, filter: 'brightness(0.85) saturate(1.2)' }}
-      />
+        style={{ backgroundImage: `url(${pixelBackground})`, filter: 'brightness(0.85) saturate(1.2)' }} />
+      
       <div className="fixed inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background/70 dark:from-background/70 dark:via-background/80 dark:to-background/90" />
 
       <div className="relative z-10 pb-24">
@@ -143,19 +143,19 @@ export default function Home() {
               <Button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
-              >
+                className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg transition-all hover:scale-105">
+                
                 <Upload className="mr-2 h-5 w-5" />
                 {isUploading ? 'Uploading...' : 'Upload File'}
               </Button>
 
-              <p className="text-xs text-muted-foreground">Supports PDF, TXT, and DOCX</p>
+              
 
-              {uploadedFiles.length > 0 && (
-                <div className="space-y-2">
+              {uploadedFiles.length > 0 &&
+              <div className="space-y-2">
                   <p className="text-sm font-medium">Uploaded Files:</p>
-                  {uploadedFiles.map((file, index) => (
-                    <div key={index} className="glass-card p-3 rounded-lg border border-white/10 space-y-2">
+                  {uploadedFiles.map((file, index) =>
+                <div key={index} className="glass-card p-3 rounded-lg border border-white/10 space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium flex items-center gap-2">
                           <FileText className="h-4 w-4" />
@@ -167,24 +167,24 @@ export default function Home() {
                       </div>
                       <p className="text-xs text-muted-foreground">{file.preview}</p>
                     </div>
-                  ))}
+                )}
                 </div>
-              )}
+              }
 
               <div className="text-muted-foreground text-sm">Or paste your content here...</div>
 
               <Textarea
                 placeholder="Paste your notes, study materials, or any content you want to learn..."
                 value={content}
-                onChange={(e) => { setContent(e.target.value); localStorage.setItem('learning-content', e.target.value); }}
-                className="min-h-[150px] md:min-h-[200px] resize-none glass-input text-sm md:text-base p-4 rounded-xl border-2 border-white/10 focus:border-primary/50 transition-all bg-background/40"
-              />
+                onChange={(e) => {setContent(e.target.value);localStorage.setItem('learning-content', e.target.value);}}
+                className="min-h-[150px] md:min-h-[200px] resize-none glass-input text-sm md:text-base p-4 rounded-xl border-2 border-white/10 focus:border-primary/50 transition-all bg-background/40" />
+              
 
               <Button
                 onClick={handleSubmit}
                 disabled={!content.trim()}
-                className="w-full text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-xl shadow-lg transition-all hover:scale-105"
-              >
+                className="w-full text-base md:text-lg px-6 md:px-8 py-5 md:py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-xl shadow-lg transition-all hover:scale-105">
+                
                 <FileText className="mr-2 h-5 w-5" />
                 Start Learning
               </Button>
@@ -200,17 +200,17 @@ export default function Home() {
           <div className="container mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold mb-12 md:mb-16 text-center text-white drop-shadow-lg">LEARNING MODES</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
-              {features.map((f, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => navigate(f.route)}
-                  className="glass-card p-6 md:p-8 rounded-2xl hover:scale-105 transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10"
-                >
+              {features.map((f, idx) =>
+              <div
+                key={idx}
+                onClick={() => navigate(f.route)}
+                className="glass-card p-6 md:p-8 rounded-2xl hover:scale-105 transition-all cursor-pointer shadow-xl hover:shadow-2xl backdrop-blur-xl border border-white/10">
+                
                   <f.Icon className="h-10 w-10 md:h-12 md:w-12 mb-4 text-primary" />
                   <h3 className="text-xl md:text-2xl font-bold mb-3">{f.title}</h3>
                   <p className="text-sm md:text-base text-muted-foreground">{f.desc}</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </section>
@@ -218,6 +218,6 @@ export default function Home() {
         {/* About */}
         <AboutSection ref={aboutRef} />
       </div>
-    </div>
-  );
+    </div>);
+
 }
