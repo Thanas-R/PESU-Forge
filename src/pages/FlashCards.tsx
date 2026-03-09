@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, RotateCcw, Sparkles, BookOpen, Lightbulb, Home } from 'lucide-react';
+import { ChevronLeft, ChevronRight, RotateCcw, Loader2, BookOpen, Lightbulb, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { TextShimmer } from '@/components/ui/text-shimmer';
 import { Progress } from '@/components/ui/progress';
@@ -83,7 +83,7 @@ export default function FlashCards() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30 p-4">
         <Card className="p-8 glass-card border border-border/50">
           <div className="flex items-center gap-3">
-            <Sparkles className="h-6 w-6 text-primary animate-pulse" />
+            <Loader2 className="h-6 w-6 text-primary animate-spin" />
             <TextShimmer duration={1} className="text-2xl font-semibold">Generating study materials...</TextShimmer>
           </div>
         </Card>
@@ -121,7 +121,7 @@ export default function FlashCards() {
         {/* Summary */}
         <Card className="glass-card p-6 md:p-8 border border-border/50">
           <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <BookOpen className="h-5 w-5 text-primary" />
             <h2 className="text-xl font-bold">Summary</h2>
           </div>
           <p className="text-muted-foreground leading-relaxed">{studyMaterial.summary}</p>

@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { TextShimmer } from '@/components/ui/text-shimmer';
-import { Trophy, ThumbsUp, BookOpen, Home, CheckCircle, XCircle, Sparkles } from 'lucide-react';
+import { Trophy, ThumbsUp, BookOpen, Home, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
 interface QuizQuestion {
   question: string;
@@ -101,7 +101,7 @@ export default function Quiz() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30">
         <Card className="p-8 glass-card border border-border/50">
           <div className="flex items-center gap-3">
-            <Sparkles className="h-6 w-6 text-primary animate-pulse" />
+            <Loader2 className="h-6 w-6 text-primary animate-spin" />
             <TextShimmer className="font-semibold text-2xl" duration={1}>Generating quiz...</TextShimmer>
           </div>
         </Card>
