@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { TextShimmer } from '@/components/ui/text-shimmer';
 import { supabase } from '@/integrations/supabase/client';
-import { HelpCircle, RotateCcw, Timer, Trophy, Sparkles, Home } from 'lucide-react';
+import { HelpCircle, RotateCcw, Timer, Trophy, Loader2, Home } from 'lucide-react';
 
 interface MemoryCard {
   id: number;
