@@ -4,7 +4,7 @@ import '@xyflow/react/dist/style.css';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
-import { Upload, Sparkles, FileText } from 'lucide-react';
+import { Upload, Zap, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CustomNode } from '@/components/CustomNode';
 import { supabase } from '@/integrations/supabase/client';
