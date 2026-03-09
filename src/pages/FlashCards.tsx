@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, RotateCcw, Sparkles, BookOpen, Lightbulb, Home } from 'lucide-react';
+import { ChevronLeft, ChevronRight, RotateCcw, Loader2, BookOpen, Lightbulb, Home } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { TextShimmer } from '@/components/ui/text-shimmer';
 import { Progress } from '@/components/ui/progress';
