@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { TextShimmer } from '@/components/ui/text-shimmer';
-import { Trophy, ThumbsUp, BookOpen, Home, CheckCircle, XCircle, Sparkles } from 'lucide-react';
+import { Trophy, ThumbsUp, BookOpen, Home, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
 interface QuizQuestion {
   question: string;
