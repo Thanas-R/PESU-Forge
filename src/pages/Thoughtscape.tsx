@@ -263,7 +263,7 @@ export default function Thoughtscape() {
               className="w-full"
               size="lg"
             >
-              <Sparkles className="mr-2 h-5 w-5" />
+              <Zap className="mr-2 h-5 w-5" />
               {isGenerating ? 'Generating...' : 'Generate Mind Map'}
             </Button>
 

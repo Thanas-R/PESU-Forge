@@ -128,7 +128,7 @@ export default function Memory() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30">
         <Card className="p-8 glass-card border border-border/50">
           <div className="flex items-center gap-3">
-            <Sparkles className="h-6 w-6 text-primary animate-pulse" />
+            <Loader2 className="h-6 w-6 text-primary animate-spin" />
             <TextShimmer className="text-2xl font-semibold" duration={1}>Loading game...</TextShimmer>
           </div>
         </Card>
