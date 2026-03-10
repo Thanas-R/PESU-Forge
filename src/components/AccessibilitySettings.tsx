@@ -32,7 +32,7 @@ export const AccessibilitySettings = () => {
           <Settings className="h-5 w-5 text-foreground" />
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md bg-card/95 backdrop-blur-xl rounded-2xl border border-white/10">
+      <DialogContent className="sm:max-w-md glass-card rounded-2xl border border-border/50">
         <DialogHeader>
           <DialogTitle className="text-2xl flex items-center gap-2 font-bold">
             <Settings className="h-6 w-6" />
