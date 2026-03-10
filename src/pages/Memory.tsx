@@ -4,24 +4,32 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { TextShimmer } from '@/components/ui/text-shimmer';
 import { supabase } from '@/integrations/supabase/client';
-import { HelpCircle, RotateCcw, Timer, Trophy, Loader2, Home } from 'lucide-react';
+import { HelpCircle, RotateCcw, Trophy, Loader2, Home, Check, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface MemoryCard {
-  id: number;
+interface MemoryPair {
+  question: string;
+  answer: string;
+}
+
+interface MemoryItem {
+  id: string;
   content: string;
-  isFlipped: boolean;
+  type: 'question' | 'answer';
+  pairIndex: number;
+  isSelected: boolean;
   isMatched: boolean;
 }
 
 export default function Memory() {
-  const [cards, setCards] = useState<MemoryCard[]>([]);
-  const [flippedCards, setFlippedCards] = useState<number[]>([]);
-  const [moves, setMoves] = useState(0);
+  const [items, setItems] = useState<MemoryItem[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [attempts, setAttempts] = useState(0);
+  const [matches, setMatches] = useState(0);
+  const [totalPairs, setTotalPairs] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [timer, setTimer] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
+  const [wrongPair, setWrongPair] = useState<string[] | null>(null);
   const [bestScore, setBestScore] = useState<number | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -30,20 +38,9 @@ export default function Memory() {
   }, []);
 
   useEffect(() => {
-    if (isRunning) {
-      intervalRef.current = setInterval(() => setTimer(t => t + 1), 1000);
-    }
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [isRunning]);
-
-  useEffect(() => {
     const content = localStorage.getItem('learning-content');
     if (!content || content.trim().length < 50) {
-      toast({
-        title: 'No content found',
-        description: 'Please upload content from the home page first (min 50 chars).',
-        variant: 'destructive',
-      });
+      toast({ title: 'No content found', description: 'Please upload content from the home page first.', variant: 'destructive' });
       setIsLoading(false);
       return;
     }
@@ -54,13 +51,24 @@ export default function Memory() {
           body: { content, type: 'memory' },
         });
         if (error) throw error;
-        const concepts: string[] = data?.concepts || [];
-        const limited = concepts.slice(0, 6).length >= 3 ? concepts.slice(0, 6) : ['Concept A', 'Concept B', 'Concept C', 'Concept D', 'Concept E', 'Concept F'];
-        const cardPairs = limited.flatMap((concept, idx) => ([
-          { id: idx * 2, content: concept, isFlipped: false, isMatched: false },
-          { id: idx * 2 + 1, content: concept, isFlipped: false, isMatched: false },
-        ]));
-        setCards(cardPairs.sort(() => Math.random() - 0.5));
+
+        const flashcards: MemoryPair[] = (data?.flashcards || []).slice(0, 6);
+        if (flashcards.length < 3) {
+          toast({ title: 'Not enough content', variant: 'destructive' });
+          setIsLoading(false);
+          return;
+        }
+
+        setTotalPairs(flashcards.length);
+        const memItems: MemoryItem[] = [];
+        flashcards.forEach((pair, idx) => {
+          memItems.push({ id: `q-${idx}`, content: pair.question, type: 'question', pairIndex: idx, isSelected: false, isMatched: false });
+          memItems.push({ id: `a-${idx}`, content: pair.answer, type: 'answer', pairIndex: idx, isSelected: false, isMatched: false });
+        });
+        // Shuffle questions and answers separately for two-column layout
+        const questions = memItems.filter(i => i.type === 'question').sort(() => Math.random() - 0.5);
+        const answers = memItems.filter(i => i.type === 'answer').sort(() => Math.random() - 0.5);
+        setItems([...questions, ...answers]);
       } catch (e) {
         console.error(e);
         toast({ title: 'Failed to generate memory game', variant: 'destructive' });
@@ -70,58 +78,77 @@ export default function Memory() {
     })();
   }, [toast]);
 
-  const handleCardClick = (idx: number) => {
-    if (flippedCards.length === 2) return;
-    if (cards[idx].isFlipped || cards[idx].isMatched) return;
+  const questions = items.filter(i => i.type === 'question');
+  const answers = items.filter(i => i.type === 'answer');
 
-    if (!isRunning) setIsRunning(true);
+  const handleSelect = (id: string) => {
+    if (wrongPair) return;
+    const item = items.find(i => i.id === id);
+    if (!item || item.isMatched) return;
 
-    const newCards = [...cards];
-    newCards[idx] = { ...newCards[idx], isFlipped: true };
-    setCards(newCards);
+    // If already selected, deselect
+    if (selected.includes(id)) {
+      setSelected(selected.filter(s => s !== id));
+      return;
+    }
 
-    const newFlipped = [...flippedCards, idx];
-    setFlippedCards(newFlipped);
+    // Can only select one Q and one A
+    const itemType = item.type;
+    const existingSameType = selected.find(s => items.find(i => i.id === s)?.type === itemType);
+    let newSelected = [...selected];
+    if (existingSameType) {
+      newSelected = newSelected.filter(s => s !== existingSameType);
+    }
+    newSelected.push(id);
+    setSelected(newSelected);
 
-    if (newFlipped.length === 2) {
-      setMoves(m => m + 1);
-      const [first, second] = newFlipped;
+    // Check if we have one Q and one A selected
+    if (newSelected.length === 2) {
+      const q = items.find(i => i.id === newSelected[0]);
+      const a = items.find(i => i.id === newSelected[1]);
+      if (q && a && q.type !== a.type) {
+        setAttempts(prev => prev + 1);
+        if (q.pairIndex === a.pairIndex) {
+          // Match!
+          setItems(prev => prev.map(i => i.id === q.id || i.id === a.id ? { ...i, isMatched: true } : i));
+          const newMatches = matches + 1;
+          setMatches(newMatches);
+          setSelected([]);
 
-      if (newCards[first].content === newCards[second].content) {
-        setTimeout(() => {
-          setCards(prev => prev.map((c, i) => i === first || i === second ? { ...c, isMatched: true } : c));
-          setFlippedCards([]);
-
-          // Check win
-          const allMatched = newCards.every((c, i) => c.isMatched || i === first || i === second);
-          if (allMatched) {
-            setIsRunning(false);
-            const finalMoves = moves + 1;
-            if (!bestScore || finalMoves < bestScore) {
-              setBestScore(finalMoves);
-              localStorage.setItem('memory-best-score', String(finalMoves));
+          if (newMatches === totalPairs) {
+            const finalAttempts = attempts + 1;
+            if (!bestScore || finalAttempts < bestScore) {
+              setBestScore(finalAttempts);
+              localStorage.setItem('memory-best-score', String(finalAttempts));
             }
-            toast({ title: 'Congratulations!', description: `Completed in ${finalMoves} moves and ${timer}s.` });
+            toast({ title: 'Congratulations!', description: `Matched all pairs in ${finalAttempts} attempts!` });
           }
-        }, 400);
-      } else {
-        setTimeout(() => {
-          setCards(prev => prev.map((c, i) => i === first || i === second ? { ...c, isFlipped: false } : c));
-          setFlippedCards([]);
-        }, 800);
+        } else {
+          // Wrong
+          setWrongPair(newSelected);
+          setTimeout(() => {
+            setWrongPair(null);
+            setSelected([]);
+          }, 800);
+        }
       }
     }
   };
 
   const resetGame = () => {
-    setCards(prev => prev.map(c => ({ ...c, isFlipped: false, isMatched: false })).sort(() => Math.random() - 0.5));
-    setFlippedCards([]);
-    setMoves(0);
-    setTimer(0);
-    setIsRunning(false);
+    setItems(prev => prev.map(i => ({ ...i, isMatched: false, isSelected: false })).sort(() => Math.random() - 0.5));
+    setSelected([]);
+    setAttempts(0);
+    setMatches(0);
+    setWrongPair(null);
   };
 
-  const formatTime = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  const getCardStyle = (item: MemoryItem) => {
+    if (item.isMatched) return 'border-green-500/40 bg-green-500/10 opacity-60';
+    if (wrongPair?.includes(item.id)) return 'border-destructive/50 bg-destructive/10 ring-2 ring-destructive/30';
+    if (selected.includes(item.id)) return 'border-primary/60 bg-primary/10 ring-2 ring-primary/30';
+    return 'border-border/50 hover:border-primary/30 hover:bg-muted/30';
+  };
 
   if (isLoading) {
     return (
@@ -136,7 +163,7 @@ export default function Memory() {
     );
   }
 
-  if (cards.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30 p-4">
         <Card className="p-8 glass-card text-center border border-border/50">
@@ -151,56 +178,98 @@ export default function Memory() {
     );
   }
 
+  const allMatched = matches === totalPairs;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 p-4">
-      <div className="container mx-auto py-8 max-w-4xl">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 p-4 pb-28">
+      <div className="container mx-auto py-8 max-w-5xl">
+        {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">Memory Match</h1>
+          <h1 className="text-3xl font-bold mb-2">Memory Match</h1>
+          <p className="text-sm text-muted-foreground mb-6">Match each question with its correct answer</p>
+
           <div className="flex gap-6 justify-center items-center flex-wrap">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Timer className="h-4 w-4" />
-              {formatTime(timer)}
+            <div className="glass-card px-4 py-2 rounded-full text-sm">
+              Attempts: <span className="font-bold text-primary">{attempts}</span>
             </div>
-            <p className="text-sm text-muted-foreground">Moves: {moves}</p>
+            <div className="glass-card px-4 py-2 rounded-full text-sm">
+              Matched: <span className="font-bold text-green-400">{matches}</span> / {totalPairs}
+            </div>
             {bestScore !== null && (
-              <div className="flex items-center gap-2 text-sm text-primary">
-                <Trophy className="h-4 w-4" />
-                Best: {bestScore}
+              <div className="glass-card px-4 py-2 rounded-full text-sm flex items-center gap-1">
+                <Trophy className="h-3.5 w-3.5 text-primary" />
+                Best: <span className="font-bold">{bestScore}</span>
               </div>
             )}
-            <Button onClick={resetGame} variant="outline" size="sm">
-              <RotateCcw className="mr-2 h-4 w-4" />
-              Reset
+            <Button onClick={resetGame} variant="outline" size="sm" className="rounded-full">
+              <RotateCcw className="mr-2 h-4 w-4" /> Reset
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 max-w-3xl mx-auto">
-          {cards.map((card, idx) => (
-            <div
-              key={card.id}
-              onClick={() => handleCardClick(idx)}
-              className="cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+        {/* Win State */}
+        <AnimatePresence>
+          {allMatched && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="glass-card p-8 rounded-2xl border border-primary/30 text-center mb-8"
             >
-              <Card
-                className={`aspect-square flex items-center justify-center p-3 border transition-all duration-300 ${
-                  card.isMatched
-                    ? 'bg-primary/20 border-primary/50 text-primary'
-                    : card.isFlipped
-                    ? 'bg-secondary/30 border-secondary/50 text-foreground'
-                    : 'bg-card border-border/50 hover:bg-muted/50'
-                }`}
+              <Trophy className="h-12 w-12 text-primary mx-auto mb-3" />
+              <h2 className="text-2xl font-bold mb-2">All Matched!</h2>
+              <p className="text-muted-foreground mb-4">Completed in {attempts} attempts</p>
+              <Button onClick={resetGame} className="rounded-full">
+                <RotateCcw className="mr-2 h-4 w-4" /> Play Again
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Two Column Layout: Questions | Answers */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Questions Column */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-primary uppercase tracking-wider text-center mb-4">Questions</h3>
+            {questions.map((item) => (
+              <motion.div
+                key={item.id}
+                whileHover={{ scale: item.isMatched ? 1 : 1.02 }}
+                whileTap={{ scale: item.isMatched ? 1 : 0.98 }}
               >
-                <div className="text-center text-sm font-medium">
-                  {card.isFlipped || card.isMatched ? (
-                    card.content
-                  ) : (
-                    <HelpCircle className="h-6 w-6 text-muted-foreground mx-auto" />
-                  )}
-                </div>
-              </Card>
-            </div>
-          ))}
+                <Card
+                  onClick={() => !item.isMatched && handleSelect(item.id)}
+                  className={`p-4 cursor-pointer transition-all duration-200 rounded-xl ${getCardStyle(item)}`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1 text-sm font-medium">{item.content}</div>
+                    {item.isMatched && <Check className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />}
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Answers Column */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-primary uppercase tracking-wider text-center mb-4">Answers</h3>
+            {answers.map((item) => (
+              <motion.div
+                key={item.id}
+                whileHover={{ scale: item.isMatched ? 1 : 1.02 }}
+                whileTap={{ scale: item.isMatched ? 1 : 0.98 }}
+              >
+                <Card
+                  onClick={() => !item.isMatched && handleSelect(item.id)}
+                  className={`p-4 cursor-pointer transition-all duration-200 rounded-xl ${getCardStyle(item)}`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1 text-sm">{item.content}</div>
+                    {item.isMatched && <Check className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />}
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
