@@ -1,40 +1,62 @@
 # PESU Forge
 
-PESU Forge is an AI-powered study tool that transforms notes into interactive learning experiences such as flashcards, quizzes, memory games, and visual mind maps.
+![React](https://img.shields.io/badge/React-18-000000?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-Build-646CFF?style=flat-square&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-Framework-000000?style=flat-square&logo=tailwindcss)
+![Gemini](https://img.shields.io/badge/Gemini-AI-0A84FF?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Archived-444444?style=flat-square)
 
-This was my first ever project and the one that introduced me to building with AI. Working on this project exposed me to how modern AI systems can be integrated into applications, which eventually pushed me to explore and build more projects afterwards. It became the starting point of my development journey and helped me understand how to connect frontend interfaces with AI-powered backends.
+PESU Forge is an AI-powered study tool that converts notes into interactive learning experiences — flashcards, quizzes, memory games, and visual mind maps.  
+This was my first project that introduced me to building with AI and connecting frontend interfaces to AI-backed features.
 
-The idea behind PESU Forge was to make studying more interactive by turning static notes into dynamic learning formats that help with recall, understanding, and engagement.
+
+## Quick summary
+
+A simple, friendly tool that turns static notes into study activities to improve recall and engagement.
+
+
+## Tech stack
+
+<p align="center">
+<img src="https://skillicons.dev/icons?i=react,ts,vite,tailwind,framer,zustand" alt="tech icons" />
+</p>
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | React + TypeScript |
+| Build | Vite |
+| Styling | Tailwind CSS + shadcn/ui |
+| Animation | Framer Motion |
+| State | Zustand, React Query |
+| AI | Google Gemini 2.5 Flash |
+
 
 ## Features
 
-- Flashcards - AI-generated question and answer cards with flip animations  
-- Quiz - Multiple-choice quizzes generated from notes with explanations  
-- Memory Match - Concept matching card game with scoring and timer  
-- Thoughtscape - Visual mind maps generated from study material  
-
-## Tech Stack
-
-**Frontend**
-- React  
-- TypeScript  
-- Vite  
-
-**Styling**
-- Tailwind CSS  
-- shadcn/ui  
-- Framer Motion  
-
-**AI**
-- Google Gemini 2.5 Flash  
+- Flashcards: AI-generated Q&A cards with flip animations  
+- Quiz: multiple-choice quizzes with explanations  
+- Memory Match: matching game with score and timer  
+- Thoughtscape: visual mind maps generated from notes  
+- Upload notes as `.txt` or `.docx`, or paste text directly
 
 
-**State Management**
-- Zustand  
-- React Query  
+## How it works (simple)
 
-## How It Works
+1. Paste or upload notes.  
+2. AI processes content and extracts concepts.  
+3. Choose a learning mode and interact with generated study materials.
 
-1. Paste notes or upload `.txt` or `.docx` files  
-2. AI processes the content and generates study materials  
-3. Choose a learning mode such as flashcards, quizzes, or concept maps
+
+## About this project
+
+My first full project — built to learn how AI can enhance web apps. Working on PESU Forge taught me how to integrate AI, structure frontend apps, and design simple interactive learning UIs.
+
+
+## Run locally
+
+```bash
+git clone <repo-url>
+cd pesu-forge
+npm install
+npm run dev
