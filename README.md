@@ -5,7 +5,6 @@
 ![Vite](https://img.shields.io/badge/Vite-Build-646CFF?style=flat-square&logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-Framework-000000?style=flat-square&logo=tailwindcss)
 ![Gemini](https://img.shields.io/badge/Gemini-AI-0A84FF?style=flat-square)
-![Status](https://img.shields.io/badge/Status-Archived-444444?style=flat-square)
 
 PESU Forge is an AI-powered study tool that converts notes into interactive learning experiences — flashcards, quizzes, memory games, and visual mind maps.  
 This was my first project that introduced me to building with AI and connecting frontend interfaces to AI-backed features.
@@ -18,7 +17,7 @@ A simple, friendly tool that turns static notes into study activities to improve
 
 ## Tech stack
 
-<p align="center">
+<p align="left">
 <img src="https://skillicons.dev/icons?i=react,ts,vite,tailwind,framer,zustand" alt="tech icons" />
 </p>
 
