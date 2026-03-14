@@ -17,9 +17,7 @@ A simple, friendly tool that turns static notes into study activities to improve
 
 ## Tech stack
 
-<p align="left">
-<img src="https://skillicons.dev/icons?i=react,ts,vite,tailwind,framer,zustand" alt="tech icons" />
-</p>
+
 
 | Layer | Technology |
 |-------|------------|
